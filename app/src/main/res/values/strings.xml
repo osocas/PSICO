@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">PSICO</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Nombre">Nombre</string>
+    <string name="Apellidos">Apellidos</string>
+    <string name="Edad">Edad</string>
+    <string name="Ciudad">Ciudad</string>
+    <string name="Correo">Correo</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="Repita_la_contraseña">Repita la contraseña</string>
+    <string name="Eres_psicólogo">¿Eres psicólogo/a?</string>
+    <string name="Sí">Sí</string>
+    <string name="No">No</string>
+    <string name="Registrarme">Registrarme</string>
+    <string name="Iniciar_Sesión">Iniciar Sesión</string>
+    <string name="No_tienes_cuenta">¿No tienes cuenta?</string>
+    <string name="Regístrate_aquí">Regístrate aquí</string>
+    <string name="Psicólogos">Psicólogos</string>
+    <string name="Foro">Foro</string>
+    <string name="Consejos">Consejos</string>
+    <string name="Correo_electrónico">Correo electrónico:</string>
+    <!--string name=""></string>
+
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+    <string name=""></string>
+
+
+
+    <string name=""></string-->
+
+
+</resources>

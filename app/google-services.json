@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1023339908361",
+    "project_id": "psicofirebase",
+    "storage_bucket": "psicofirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023339908361:android:16a899af9968eca00ad7d8",
+        "android_client_info": {
+          "package_name": "com.uoc.psico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023339908361-g8rks87fv4dsp94ope7tdn415utpscvf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6WBNlEEx-NBws_PTrgHpJqxBuYbCMd24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023339908361-g8rks87fv4dsp94ope7tdn415utpscvf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

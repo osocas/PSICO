@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/psicologosFragment"
+        android:icon="@drawable/ic_psicologos"
+        android:title="@string/Psicólogos" />
+    <item
+        android:id="@+id/foroFragment"
+        android:icon="@drawable/ic_baseline_forum_24"
+        android:title="@string/Foro" />
+    <item
+        android:id="@+id/consejosFragment"
+        android:icon="@drawable/ic_consejos"
+        android:title="@string/Consejos" />
+
+</menu>
