@@ -142,7 +142,8 @@ class Registrarse : AppCompatActivity() {
             "apellidos" to usuario.apellidos,
             "edad" to usuario.edad,
             "ciudad" to usuario.ciudad,
-            "psicologo" to usuario.psicologo)
+            "psicologo" to usuario.psicologo,
+            "foto" to "")
         )
     }
 

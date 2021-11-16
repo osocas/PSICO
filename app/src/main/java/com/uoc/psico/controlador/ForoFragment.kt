@@ -1,11 +1,17 @@
 package com.uoc.psico.controlador
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
 import kotlinx.android.synthetic.main.fragment_foro.*
 
@@ -25,6 +31,9 @@ class ForoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var auth: FirebaseAuth
+    private val user = Firebase.auth.currentUser
     //private var layoutManager: RecyclerView.LayoutManager? = null
    // private var adapter: RecyclerView.Adapter<ForoAdapter.ViewHolder>? = null
 
@@ -47,11 +56,30 @@ class ForoFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
+        auth = Firebase.auth
+
         foroReccycler.apply {
             layoutManager =
                 LinearLayoutManager(activity)
             adapter = ForoAdapter()
         }
+
+        if (user != null) {
+            //tv_perfil_correo.setText(user.email.toString())
+            db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener{
+                if((it.get("psicologo") as Boolean) == true){
+                    bt_añadir.setVisibility(Button.VISIBLE)
+
+                    bt_añadir.setOnClickListener{
+                        val intent = Intent(getActivity(), AgregarPostForo::class.java)
+                        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
+        //bt_añadir.setVisibility(Button.VISIBLE)
     }
 
     companion object {

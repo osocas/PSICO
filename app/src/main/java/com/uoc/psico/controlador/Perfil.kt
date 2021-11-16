@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.uoc.psico.R
 import kotlinx.android.synthetic.main.activity_perfil.*
 
@@ -28,6 +31,11 @@ class Perfil : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private lateinit var auth: FirebaseAuth
 
+    private val user = Firebase.auth.currentUser
+    private val File = 1
+   // private val database = FirebaseFirestore.database
+   // val myRef = database.getReference("user")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
@@ -35,6 +43,23 @@ class Perfil : AppCompatActivity() {
         auth = Firebase.auth
 
 
+        bottomNavigationBar()
+
+
+        val bundle = intent.extras
+        //val correo = bundle?.getString("correo")
+        //val provider = bundle?.getString("provider")
+
+
+        iv_imagen_perfil.setOnClickListener{
+            fileUpload()
+        }
+
+        setup()//correo ?: "", provider ?: "")
+
+    }
+
+    private fun bottomNavigationBar(){
         val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView_perfil) as BottomNavigationView
 
 
@@ -68,15 +93,9 @@ class Perfil : AppCompatActivity() {
             }
             true
         })
-
-
-        val bundle = intent.extras
-        //val correo = bundle?.getString("correo")
-        //val provider = bundle?.getString("provider")
-
-        setup()//correo ?: "", provider ?: "")
-
     }
+
+
 
     private fun setup(){//correo: String, provider: String){
         title = "Perfil"
@@ -85,7 +104,7 @@ class Perfil : AppCompatActivity() {
 
 
 
-        val user = Firebase.auth.currentUser
+
         if (user != null) {
             //tv_perfil_correo.setText(user.email.toString())
             db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener{
@@ -94,7 +113,7 @@ class Perfil : AppCompatActivity() {
                 tv_perfil_ciudad.setText(it.get("ciudad") as String?)
                 tv_perfil_correo.setText(user.email.toString())
 
-
+                Glide.with(this).load(it.get("foto") as String?).centerCrop().into(iv_imagen_perfil)
 
                 if((it.get("psicologo") as Boolean) == false){
 
@@ -132,7 +151,9 @@ class Perfil : AppCompatActivity() {
 
         bt_cerrar_sesion.setOnClickListener{
             FirebaseAuth.getInstance().signOut()
-            onBackPressed()
+            val Intent = Intent(this, MainActivity::class.java)
+            Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+            startActivity(Intent)
         }
 
 
@@ -145,6 +166,41 @@ class Perfil : AppCompatActivity() {
             startActivity(Intent)
         }
 
+    }
+
+    //Abrimos la galería del móvil
+    fun fileUpload() {
+        val intent = Intent (Intent.ACTION_GET_CONTENT)
+        intent.type= "*/*"
+        startActivityForResult(intent,File)
+    }
+
+    //Una vez seleccionada la imagen se guarda en el Storage de Firebase en la carpeta User
+    override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == File) {
+            if (resultCode == RESULT_OK) {
+                val FileUri = data!!.data
+                val Folder: StorageReference =
+                    FirebaseStorage.getInstance().getReference().child("User")
+                val file_name: StorageReference = Folder.child("file" + FileUri!!.lastPathSegment)
+                file_name.putFile(FileUri).addOnSuccessListener { taskSnapshot ->
+                    file_name.getDownloadUrl().addOnSuccessListener { uri ->
+
+                        val url = java.lang.String.valueOf(uri).toString()
+
+                        //Modificamos el campo foto  de la BD para añadir la foto obtenída
+                        if (user != null) {
+                            db.collection("usuarios").document(user.email.toString()).update("foto", url)
+                        }
+
+                        //Mostramos la imagen
+                        Glide.with(this).load(url).centerCrop().into(iv_imagen_perfil)
+
+                    }
+                }
+            }
+        }
     }
 
 }

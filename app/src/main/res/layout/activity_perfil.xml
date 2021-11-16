@@ -20,7 +20,7 @@
         app:menu="@menu/bottom_menu" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_imagen_perfil"
         android:layout_width="137dp"
         android:layout_height="126dp"
         android:layout_marginTop="32dp"
@@ -38,7 +38,7 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_imagen_perfil" />
 
     <TextView
         android:id="@+id/textView2"

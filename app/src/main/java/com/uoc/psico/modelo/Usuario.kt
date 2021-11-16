@@ -10,15 +10,3 @@ class Usuario (
     //var foto
 
 
-   /* constructor(correo: String, nombre: String, apellidos: String, edad: Int, ciudad: String, psicologo: Boolean){
-        this.correo = correo
-        this.nombre = nombre
-        this.apellidos = apellidos
-        this.edad =  edad
-        this.ciudad = ciudad
-        this.psicologo = psicologo
-
-    }
-
-
-}*/

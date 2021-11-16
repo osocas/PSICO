@@ -51,6 +51,7 @@ class PsicologosFragment : Fragment() {
         super.onViewCreated(itemView, savedInstanceState)
 
 
+
         psicologosReccycler.apply {
             layoutManager =
                 LinearLayoutManager(activity)

@@ -24,6 +24,14 @@ class InicioSesion : AppCompatActivity() {
 
         }
 
+        bottomNavigationBar()
+
+        setup()
+
+    }
+
+
+    private fun bottomNavigationBar(){
         val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView_inicioSesion) as BottomNavigationView
         //Ningún elemento seleccionado
         bottomNavigationView.getMenu().setGroupCheckable(0, false, true)
@@ -56,11 +64,7 @@ class InicioSesion : AppCompatActivity() {
             true
         })
 
-
-        setup()
-
     }
-
 
     private fun setup(){
 
