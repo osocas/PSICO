@@ -72,9 +72,9 @@ class Registrarse : AppCompatActivity() {
 
         id_registrarme.setOnClickListener{
 
-            if (rb_si.isChecked){
+            /*if (rb_si.isChecked){
                 Log.d("TAG", "chaequeado el si")
-            }
+            }*/
 
             //Verificamos que todos los campos están rellenos
             if (et_Registro_Correo.text.isNotEmpty() && et_Registro_Contraseña.text.isNotEmpty() &&

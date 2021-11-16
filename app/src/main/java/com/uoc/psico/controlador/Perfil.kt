@@ -113,7 +113,7 @@ class Perfil : AppCompatActivity() {
                 tv_perfil_ciudad.setText(it.get("ciudad") as String?)
                 tv_perfil_correo.setText(user.email.toString())
 
-                Glide.with(this).load(it.get("foto") as String?).centerCrop().into(iv_imagen_perfil)
+                Glide.with(this).load(it.get("foto") as String?).error(R.drawable.ic_foto_perfil).centerCrop().into(iv_imagen_perfil)
 
                 if((it.get("psicologo") as Boolean) == false){
 
@@ -195,7 +195,7 @@ class Perfil : AppCompatActivity() {
                         }
 
                         //Mostramos la imagen
-                        Glide.with(this).load(url).centerCrop().into(iv_imagen_perfil)
+                        Glide.with(this).load(url).error(R.drawable.ic_foto_perfil).centerCrop().into(iv_imagen_perfil)
 
                     }
                 }
