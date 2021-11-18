@@ -21,6 +21,16 @@
     <string name="Consejos">Consejos</string>
     <string name="Correo_electrónico">Correo electrónico:</string>
     <string name="Añadir_un_post_al_foro">Añadir un post al foro</string>
+    <string name="Direccion">Dirección:</string>
+    <string name="Precio">Precio:</string>
+    <string name="Teléfono">Teléfono:</string>
+    <string name="Especialidades_que_trata">Especialidades que trata:</string>
+    <string name="Horario">Horario:</string>
+    <string name="Realiza_consultas">Realiza consultas:</string>
+    <string name="Descripcion">Descripción:</string>
+    <string name="Añadir_una_reseña">Añadir una reseña</string>
+    <string name="Valorar_y_escribir_una_reseña">Valorar y escribir una reseña</string>
+    <string name="Compartir_reseña">Compartir reseña</string>
     <!--string name=""></string>
 
 

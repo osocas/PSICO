@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PSICO">
-        <activity android:name=".controlador.AgregarPostForo"></activity>
+        <activity android:name=".controlador.AnadirResena"></activity>
+        <activity android:name=".controlador.InfoPsicologo" />
+        <activity android:name=".controlador.AgregarPostForo" />
         <activity android:name=".controlador.Publicitarse" />
         <activity android:name=".controlador.Registrarse" />
         <activity android:name=".controlador.InicioSesion" />
