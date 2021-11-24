@@ -4,16 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.RatingBar
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
-import com.uoc.psico.modelo.Psicologos
+import com.uoc.psico.modelo.BDBackground
 import com.uoc.psico.modelo.Resenas
 import kotlinx.android.synthetic.main.activity_info_psicologo.*
-import kotlinx.android.synthetic.main.activity_perfil.*
 
 class InfoPsicologo : AppCompatActivity() {
 
@@ -24,6 +26,9 @@ class InfoPsicologo : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info_psicologo)
+
+
+        bottomNavigationBar()
 
         mostrarLosDatos()
 
@@ -38,6 +43,41 @@ class InfoPsicologo : AppCompatActivity() {
         }
 
         reseñas(correo.toString())
+    }
+
+    private fun bottomNavigationBar(){
+        val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView_infoPsicologo) as BottomNavigationView
+        //Ningún elemento seleccionado
+        bottomNavigationView.getMenu().setGroupCheckable(0, false, true)
+
+        //Listener del menú inferior para saber que botón se ha pulsado
+        bottomNavigationView.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.psicologosFragment -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("seleccionado", "psicologosFragment")
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(intent)
+                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
+                    // openFragment(PsicologosFragment.newInstance("", ""))
+                }
+                R.id.foroFragment -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("seleccionado", "foroFragment")
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(intent)
+                }
+                R.id.consejosFragment -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("seleccionado", "consejosFragment")
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(intent)
+                }
+
+            }
+            true
+        })
+
     }
 
     private fun mostrarLosDatos(){
@@ -99,6 +139,16 @@ class InfoPsicologo : AppCompatActivity() {
     private fun reseñas(correo: String){
         //db.collection("stories").where("author", "==", user.uid).get()
 
+
+        //BDBackground().execute(correo)
+
+        //resenasRecycler.layoutManager = GridLayoutManager(this, 1)
+        //resenasRecycler.adapter = ResenaAdapter(BDBackground().execute(correo))
+        //bDBackground.execute(correo)
+        var sumaPuntuaciones = 0.0
+        var resenasSize = 0
+
+
         var listaResenas = mutableListOf<Resenas>()
 
         Log.d("TAG", "CORREO: "+ user?.email.toString())
@@ -106,11 +156,17 @@ class InfoPsicologo : AppCompatActivity() {
             for (document in documents) {
                 Log.d("TAG", "ESTO ES LO QUE OBTENEMOS: ${document.id} => ${document.data.get("comentario")}")
                 listaResenas.add(Resenas(document.data.get("nombre") as String, document.data.get("puntuacion") as Double, document.data.get("fecha") as String, document.data.get("comentario") as String))
-
-
+                resenasSize++
+                sumaPuntuaciones += (document.data.get("puntuacion") as Double)
             }
             resenasRecycler.layoutManager = GridLayoutManager(this, 1)
             resenasRecycler.adapter = ResenaAdapter(listaResenas)
+            rb_infoPsicologo.setVisibility(RatingBar.VISIBLE)
+            rb_infoPsicologo.rating = ((sumaPuntuaciones/resenasSize).toFloat())
+
+            //if (user != null) {
+                db.collection("psicologos").document(correo).update("puntuacion_media", (sumaPuntuaciones/resenasSize) as Number)
+            //}
         }
 
         //resenasRecycler.layoutManager = GridLayoutManager(this, 2)

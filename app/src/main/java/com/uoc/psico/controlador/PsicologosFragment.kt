@@ -10,14 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.modelo.BBDD
+import com.uoc.psico.modelo.BDBackground
 import com.uoc.psico.modelo.Psicologos
 import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.fragment_psicologos.*
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +63,18 @@ class PsicologosFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
+        //adapter(getListaPsicologos())
+        //val bdBackground :  BDBackground
+        /*BDBackground().getListaPsicologos()
+
+
+        var binding = ActivityMainBinding.inflate
+
+
+        val listaObserve = Observer<MutableList<Psicologos>>{
+
+        }*/
+
 
 
         var listaPsicologos = mutableListOf<Psicologos>()
@@ -66,19 +82,15 @@ class PsicologosFragment : Fragment() {
         db.collection("psicologos").get().addOnSuccessListener{ result ->
             for (i in result){
                 //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
-                val psicologo = Psicologos(i.data.get("correo") as String, i.data.get("mombre") as String,
-                        i.data.get("direccion") as String, i.data.get("precio") as String, (i.data.get("n_telefono") as Number).toInt(),
-                        i.data.get("especialidades") as String, i.data.get("horario") as String, i.data.get("consulta_online") as Boolean,
-                        i.data.get("consulta_presencial") as Boolean, i.data.get("consulta_telefonica") as Boolean,
-                        i.data.get("foto") as String, i.data.get("descripcion") as String, (i.data.get("puntuacion_media") as Number).toDouble())
 
-                listaPsicologos.add(psicologo)
+                listaPsicologos.add(Psicologos(i.data.get("correo") as String, i.data.get("mombre") as String,
+                    i.data.get("direccion") as String, i.data.get("precio") as String, (i.data.get("n_telefono") as Number).toInt(),
+                    i.data.get("especialidades") as String, i.data.get("horario") as String, i.data.get("consulta_online") as Boolean,
+                    i.data.get("consulta_presencial") as Boolean, i.data.get("consulta_telefonica") as Boolean,
+                    i.data.get("foto") as String, i.data.get("descripcion") as String, (i.data.get("puntuacion_media") as Number).toDouble()))
             }
-
-            Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
+            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
             adapter(listaPsicologos)
-
-
 
         }
 
@@ -87,9 +99,15 @@ class PsicologosFragment : Fragment() {
 
 
 
+       // var listaP = getListaPsicologos()
+       // Log.d("TAG", "CONTIENE: " + listaP)
+
+         //var aux : Psicologos
+
+        // val listaPsicologos1 = aux.getListaPsicologos()
 
 
-            //tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
+        //tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
 
 
 

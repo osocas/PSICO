@@ -13,7 +13,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.modelo.Foro
+import com.uoc.psico.modelo.Psicologos
 import kotlinx.android.synthetic.main.fragment_foro.*
+import kotlinx.android.synthetic.main.fragment_psicologos.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -58,11 +61,28 @@ class ForoFragment : Fragment() {
 
         auth = Firebase.auth
 
-        foroReccycler.apply {
+        /*foroReccycler.apply {
             layoutManager =
                 LinearLayoutManager(activity)
             adapter = ForoAdapter()
+        }*/
+
+
+        var listaPosts = mutableListOf<Foro>()
+
+        db.collection("foro").get().addOnSuccessListener{ result ->
+            for (i in result){
+
+                listaPosts.add(
+                    Foro(i.data.get("correo") as String, i.data.get("nombre") as String,
+                    i.data.get("post") as String)
+                )
+            }
+
+            adapter(listaPosts)
+
         }
+
 
         if (user != null) {
             //tv_perfil_correo.setText(user.email.toString())
@@ -80,6 +100,23 @@ class ForoFragment : Fragment() {
         }
 
         //bt_añadir.setVisibility(Button.VISIBLE)
+    }
+
+
+    private fun adapter(listaPosts: MutableList<Foro>) {
+        foroReccycler.apply {
+            layoutManager =
+                LinearLayoutManager(activity)
+
+
+            // Al pulsar sobre algun elemento del reccycler
+            adapter = ForoAdapter(listaPosts) { position ->
+                val intent = Intent(getActivity(), InfoPsicologo::class.java)
+                intent.putExtra("correo", listaPosts[position].correo)
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                startActivity(intent)
+            }
+        }
     }
 
     companion object {

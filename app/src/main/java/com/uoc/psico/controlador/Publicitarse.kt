@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.uoc.psico.R
+import com.uoc.psico.modelo.Psicologos
 import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.activity_publicitarse.*
 import kotlinx.android.synthetic.main.activity_registrarse.*
@@ -94,7 +95,18 @@ class Publicitarse : AppCompatActivity() {
                // Log.d("TAG", "cb_publi_online.isChecked: " + cb_publi_online.isChecked + " otro " + cb_publi_presencial.isChecked + " otro " + cb_publi_telefonica.isChecked)
 
                 if (user != null) {
-                    db.collection("psicologos").document(user.email.toString()).set(
+
+
+                    //Guardamos el psicólogo publicitado en la BD
+                    Psicologos(user.email.toString(),et_publi_nombre.text.toString(), et_publi_dirección.text.toString(),
+                        et_publi_precio.text.toString(), et_publi_telefono.text.toString().toInt(),
+                        et_publi_especialidades.text.toString(), et_publi_horario.text.toString(),
+                        cb_publi_online.isChecked, cb_publi_presencial.isChecked, cb_publi_telefonica.isChecked,
+                        foto, et_publi_descripción.text.toString(),
+                        99.0).addPsicologo()
+
+
+                    /*db.collection("psicologos").document(user.email.toString()).set(
                             hashMapOf("correo" to user.email.toString(),
                                     "mombre" to et_publi_nombre.text.toString(),
                                     "direccion" to et_publi_dirección.text.toString(),
@@ -108,7 +120,12 @@ class Publicitarse : AppCompatActivity() {
                                     "foto" to foto,
                                     "descripcion" to et_publi_descripción.text.toString(),
                                     "puntuacion_media" to 5)
-                    )
+                    )*/
+
+
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(intent)
                 }
 
 

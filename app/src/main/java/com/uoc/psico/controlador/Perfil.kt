@@ -46,7 +46,7 @@ class Perfil : AppCompatActivity() {
         bottomNavigationBar()
 
 
-        val bundle = intent.extras
+        //val bundle = intent.extras
         //val correo = bundle?.getString("correo")
         //val provider = bundle?.getString("provider")
 

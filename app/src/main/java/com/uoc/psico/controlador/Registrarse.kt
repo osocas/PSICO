@@ -137,14 +137,17 @@ class Registrarse : AppCompatActivity() {
     }
 
     private fun saveDataDB(usuario: Usuario){
-        db.collection("usuarios").document(usuario.correo).set(
+
+        usuario.addUsuario()
+
+    /*db.collection("usuarios").document(usuario.correo).set(
             hashMapOf("nombre" to usuario.nombre,
             "apellidos" to usuario.apellidos,
             "edad" to usuario.edad,
             "ciudad" to usuario.ciudad,
             "psicologo" to usuario.psicologo,
             "foto" to "")
-        )
+        )*/
     }
 
 

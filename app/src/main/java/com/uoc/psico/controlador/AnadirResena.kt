@@ -1,5 +1,6 @@
 package com.uoc.psico.controlador
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.modelo.Resenas
 import kotlinx.android.synthetic.main.activity_anadir_resena.*
 import kotlinx.android.synthetic.main.activity_perfil.*
 import java.text.SimpleDateFormat
@@ -32,6 +34,13 @@ class AnadirResena : AppCompatActivity() {
         //rb_anadir_resena.rating = 3.5F
 
 
+
+        botonComptartirReseña(correo.toString())
+
+
+    }
+
+    private fun botonComptartirReseña(correo: String){
         bt_compartir_resena.setOnClickListener{
 
 
@@ -46,24 +55,28 @@ class AnadirResena : AppCompatActivity() {
                 var nombre = ""
                 db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener {
 
-                    db.collection("resenas").add(
+                    //Guardamos la reseña en la base de datos
+                    Resenas(it.get("nombre") as String? + " " + it.get("apellidos") as String?, rb_anadir_resena.rating.toDouble(),currentDate, et_anadir_resena.text.toString()).addResena(correo)
+                   /* db.collection("resenas").add(
                         hashMapOf("correoPsicologo" to correo,
                             "nombre" to (it.get("nombre") as String? + " " + it.get("apellidos") as String?),
                             "puntuacion" to rb_anadir_resena.rating.toDouble(),
                             "fecha" to currentDate,
                             "comentario" to et_anadir_resena.text.toString())
-                    )
+                    )*/
 
                 }
-
-
-
 
             }
 
 
+            val intent = Intent(this, InfoPsicologo::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+            startActivity(intent)
+
+
+
+
         }
-
-
     }
 }
