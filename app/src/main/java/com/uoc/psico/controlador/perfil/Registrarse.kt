@@ -1,20 +1,18 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.perfil
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Toast
 
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.controlador.MainActivity
+import com.uoc.psico.controlador.Perfil
+import com.uoc.psico.controlador.ProviderType
 import com.uoc.psico.modelo.Usuario
 import kotlinx.android.synthetic.main.activity_registrarse.*
 

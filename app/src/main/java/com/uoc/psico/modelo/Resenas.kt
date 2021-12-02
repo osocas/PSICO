@@ -1,7 +1,6 @@
 package com.uoc.psico.modelo
 
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_anadir_resena.*
 
 class Resenas(
     var nombre: String,

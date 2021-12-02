@@ -1,18 +1,15 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.psicologos
 
-import android.app.Activity
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.uoc.psico.R
 import com.uoc.psico.modelo.Psicologos
-import kotlinx.android.synthetic.main.activity_perfil.*
-import java.text.FieldPosition
 
 //import androidx.recyclerview.widget.RecyclerView
 
@@ -32,11 +29,15 @@ class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemCl
         var itemImagen: ImageView
         var itemNombre: TextView
         var itemDireccion: TextView
+        var itemPuntuacion: RatingBar
+        var itemNoHayResenas: TextView
 
         init {
             itemImagen = itemView.findViewById(R.id.idImagen)
             itemNombre = itemView.findViewById(R.id.idNombre)
             itemDireccion = itemView.findViewById(R.id.idDireccion)
+            itemPuntuacion = itemView.findViewById(R.id.rb_itemPsicologo)
+            itemNoHayResenas = itemView.findViewById(R.id.tv_no_hay_resenas)
 
 
             // para detectar el click de algún elemento
@@ -52,10 +53,15 @@ class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemCl
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
-        viewHolder.itemNombre.text = listaPsicologos[i].mombre
+        viewHolder.itemNombre.text = listaPsicologos[i].nombre
         viewHolder.itemDireccion.text = listaPsicologos[i].direccion
-        //viewHolder.itemImagen.setImageResource(imagen[i])
-        Glide.with(viewHolder.itemImagen.context).load(listaPsicologos[i].foto).error(R.drawable.ic_foto_perfil).centerCrop().into(viewHolder.itemImagen)
+        Glide.with(viewHolder.itemImagen.context).load(listaPsicologos[i].foto).error(R.drawable.ic_no_foto).centerCrop().into(viewHolder.itemImagen)
+
+        if (listaPsicologos[i].puntuacion_media.toString() != "NaN" && listaPsicologos[i].puntuacion_media != 99.0){
+            viewHolder.itemPuntuacion.setVisibility(RatingBar.VISIBLE)
+            viewHolder.itemNoHayResenas.setVisibility(RatingBar.INVISIBLE)
+            viewHolder.itemPuntuacion.rating = (listaPsicologos[i].puntuacion_media.toFloat())
+        }
 
     }
 

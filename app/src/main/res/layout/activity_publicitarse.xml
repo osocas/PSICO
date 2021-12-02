@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFE3B3"
-    tools:context=".controlador.Publicitarse">
+    tools:context=".controlador.perfil.Publicitarse">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -28,7 +28,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
-                android:text="Rellene los siguientes datos para publicitarse:"
+                android:text="@string/Rellene_los_siguientes_datos_para_publicitarse"
                 android:textColor="#000000"
                 android:textSize="25sp"
                 android:textStyle="normal"
@@ -60,11 +60,11 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="Dirección"
-                android:inputType="textPersonName"
+                android:hint="@string/Dirección"
+                android:inputType="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/et_publi_nombre" />
+                app:layout_constraintTop_toBottomOf="@+id/et_publi_ciudad" />
 
             <EditText
                 android:id="@+id/et_publi_precio"
@@ -74,7 +74,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="Precio por hora"
+                android:hint="@string/Precio_por_hora"
                 android:inputType="numberDecimal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="Número de teléfono"
+                android:hint="@string/Número_de_teléfono"
                 android:inputType="number"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -102,8 +102,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="Especialidades que trata"
-                android:inputType="textPersonName"
+                android:hint="@string/Especialidades_quetrata"
+                android:inputType="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_publi_telefono" />
@@ -116,8 +116,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:ems="10"
-                android:hint="Horario"
-                android:inputType="textPersonName"
+                android:hint="@string/Horario_"
+                android:inputType="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_publi_especialidades" />
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:text="Realiza consultas"
+                android:text="@string/Realiza_consultas"
                 android:textColor="#040404"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
-                android:text="Online"
+                android:text="@string/Online"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
-                android:text="Telefónica"
+                android:text="@string/Telefónica"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_publi_online" />
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="8dp"
-                android:text="Presenciales"
+                android:text="@string/Presenciales"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/cb_publi_online"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:text="Añadir una foto:"
+                android:text="@string/Añadir_una_foto"
                 android:textColor="#000000"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -199,7 +199,7 @@
                 android:layout_marginEnd="32dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Escribe aquí tu descripción"
+                android:hint="@string/Escribe_aquí_tu_descripción"
                 android:inputType="textMultiLine"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -214,13 +214,41 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="#63CAA7"
-                android:text="Publicar"
+                android:text="@string/Publicar"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/et_publi_descripción" />
+
+            <EditText
+                android:id="@+id/et_publi_ciudad"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:ems="10"
+                android:hint="@string/Ciudad"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_publi_provincia" />
+
+            <EditText
+                android:id="@+id/et_publi_provincia"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:ems="10"
+                android:hint="@string/Provincia"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_publi_nombre" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

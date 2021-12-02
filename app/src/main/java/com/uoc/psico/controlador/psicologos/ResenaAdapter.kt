@@ -1,6 +1,5 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.psicologos
 
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

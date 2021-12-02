@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="#ECEAEA"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
@@ -13,7 +13,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="#ece7e7"
+        card_view:cardBackgroundColor="#FFFFFF"
         tools:layout_editor_absoluteX="20dp"
         tools:layout_editor_absoluteY="10dp">
 
@@ -28,32 +28,62 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_psicologos"
-                card_view:layout_constraintEnd_toStartOf="@+id/idNombre"
+                card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/idNombre"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:text="Nombre"
-                android:textSize="25sp"
-                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="22sp"
+                android:textStyle="normal"
+                card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toEndOf="@+id/idImagen"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/idDireccion"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Dirección "
+                android:textSize="16sp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/idImagen"
+                card_view:layout_constraintTop_toBottomOf="@+id/rb_itemPsicologo"
+                card_view:layout_constraintVertical_bias="0.0" />
+
+            <RatingBar
+                android:id="@+id/rb_itemPsicologo"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:visibility="invisible"
+                card_view:layout_constraintStart_toEndOf="@+id/idImagen"
+                card_view:layout_constraintTop_toBottomOf="@+id/idNombre" />
+
+            <TextView
+                android:id="@+id/tv_no_hay_resenas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="No hay reseñas"
+                android:textSize="16sp"
                 card_view:layout_constraintStart_toEndOf="@+id/idImagen"
                 card_view:layout_constraintTop_toBottomOf="@+id/idNombre" />
 

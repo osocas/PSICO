@@ -1,4 +1,4 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.foro
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.uoc.psico.R
 import com.uoc.psico.modelo.Foro
-import com.uoc.psico.modelo.Psicologos
 
 class ForoAdapter(val listaPosts: MutableList<Foro>, val itemClick: (Int) -> Unit): RecyclerView.Adapter<ForoAdapter.ViewHolder>() {
 
@@ -22,9 +21,12 @@ class ForoAdapter(val listaPosts: MutableList<Foro>, val itemClick: (Int) -> Uni
         var itemNombre: TextView
         var itemPost: TextView
 
+
         init {
             itemNombre = itemView.findViewById(R.id.id_nombre_foro)
             itemPost = itemView.findViewById(R.id.id_post_foro)
+
+
 
             itemView.setOnClickListener( {itemClick(layoutPosition)} )
 
@@ -39,6 +41,7 @@ class ForoAdapter(val listaPosts: MutableList<Foro>, val itemClick: (Int) -> Uni
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         viewHolder.itemNombre.text = listaPosts[i].nombre
         viewHolder.itemPost.text = listaPosts[i].post
+
 
     }
 

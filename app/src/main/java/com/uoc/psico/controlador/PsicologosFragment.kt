@@ -3,25 +3,19 @@ package com.uoc.psico.controlador
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
-import com.uoc.psico.modelo.BBDD
-import com.uoc.psico.modelo.BDBackground
+import com.uoc.psico.controlador.psicologos.InfoPsicologo
+import com.uoc.psico.controlador.psicologos.PsicologosAdapter
 import com.uoc.psico.modelo.Psicologos
-import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.fragment_psicologos.*
-import java.util.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,24 +69,34 @@ class PsicologosFragment : Fragment() {
 
         }*/
 
+        if (activity?.intent!!.hasExtra("listaBusqueda")) {
+           // productList = activity?.intent!!.getStringArrayExtra("ServiceArea").toString()
+
+            val extras = activity?.intent!!.extras
+            val listaBusqueda = extras?.get("listaBusqueda") as? ArrayList<String>
 
 
-        var listaPsicologos = mutableListOf<Psicologos>()
 
-        db.collection("psicologos").get().addOnSuccessListener{ result ->
-            for (i in result){
-                //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
+            /*if (listaBusqueda != null) {
+                for(i in listaBusqueda){
+                    Log.d("TAG", "listaBusqueda ->" + i)
+                }
+            }*/
 
-                listaPsicologos.add(Psicologos(i.data.get("correo") as String, i.data.get("mombre") as String,
-                    i.data.get("direccion") as String, i.data.get("precio") as String, (i.data.get("n_telefono") as Number).toInt(),
-                    i.data.get("especialidades") as String, i.data.get("horario") as String, i.data.get("consulta_online") as Boolean,
-                    i.data.get("consulta_presencial") as Boolean, i.data.get("consulta_telefonica") as Boolean,
-                    i.data.get("foto") as String, i.data.get("descripcion") as String, (i.data.get("puntuacion_media") as Number).toDouble()))
+
+           // Log.d("TAG", "El INTENT HA LLEGADO CON listaBusqueda" + listaBusqueda )
+            if (listaBusqueda != null) {
+                psicologosBuscados(listaBusqueda)
             }
-            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
-            adapter(listaPsicologos)
-
+        }else{
+            todosLosPsicologosDB()
         }
+
+
+
+
+
+
 
 
 
@@ -113,36 +117,96 @@ class PsicologosFragment : Fragment() {
 
     }
 
+    private fun psicologosBuscados(listaBusqueda: ArrayList<String>) {
+        var listaPsicologos = mutableListOf<Psicologos>()
+
+        db.collection("psicologos").get().addOnSuccessListener{ result ->
+            for (i in result){
+                //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
+
+
+                for(p in listaBusqueda) {
+                    //Log.d("TAG", "listaBusqueda ->" + p)
+                    if((i.data.get("correo") as String) == p.toString()){
+
+                        Log.d("TAG", "listaBusqueda ->" + p)
+                        listaPsicologos.add(
+                            Psicologos(i.data.get("correo") as String,
+                                i.data.get("nombre") as String,
+                                i.data.get("provincia") as String,
+                                i.data.get("ciudad") as String,
+                                i.data.get("direccion") as String,
+                                i.data.get("precio") as String,
+                                (i.data.get("n_telefono") as Number).toInt(),
+                                i.data.get("especialidades") as String,
+                                i.data.get("horario") as String,
+                                i.data.get("consulta_online") as Boolean,
+                                i.data.get("consulta_presencial") as Boolean,
+                                i.data.get("consulta_telefonica") as Boolean,
+                                i.data.get("foto") as String,
+                                i.data.get("descripcion") as String,
+                                (i.data.get("puntuacion_media") as Number).toDouble()
+                            )
+                        )
+                    }
+                }
+
+
+            }
+            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
+            adapter(listaPsicologos)
+
+        }
+    }
+
+    private fun todosLosPsicologosDB() {
+        var listaPsicologos = mutableListOf<Psicologos>()
+
+        db.collection("psicologos").get().addOnSuccessListener{ result ->
+            for (i in result){
+                //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
+
+                listaPsicologos.add(
+                    Psicologos(i.data.get("correo") as String,
+                        i.data.get("nombre") as String,
+                        i.data.get("provincia") as String,
+                        i.data.get("ciudad") as String,
+                        i.data.get("direccion") as String,
+                        i.data.get("precio") as String,
+                        (i.data.get("n_telefono") as Number).toInt(),
+                        i.data.get("especialidades") as String,
+                        i.data.get("horario") as String,
+                        i.data.get("consulta_online") as Boolean,
+                        i.data.get("consulta_presencial") as Boolean,
+                        i.data.get("consulta_telefonica") as Boolean,
+                        i.data.get("foto") as String,
+                        i.data.get("descripcion") as String,
+                        (i.data.get("puntuacion_media") as Number).toDouble()
+                    )
+                )
+            }
+            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
+            adapter(listaPsicologos)
+
+        }
+    }
+
     private fun adapter(listaPsicologos: MutableList<Psicologos>){
         psicologosReccycler.apply {
             layoutManager =
                     LinearLayoutManager(activity)
-            //adapter = PsicologosAdapter()
+
 
             // Al pulsar sobre algun elemento del reccycler
             adapter = PsicologosAdapter(listaPsicologos) { position ->
-                // do something
+
                 Toast.makeText(activity, "yoou clecked on item no: $position", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(activity, InfoPsicologo::class.java)
-                //intent.putExtra("psicologoSelect", listaPsicologos[position])
-
 
                 intent.putExtra("correo", listaPsicologos[position].correo)
-                intent.putExtra("mombre", listaPsicologos[position].mombre)
-                intent.putExtra("direccion", listaPsicologos[position].direccion)
-                intent.putExtra("precio", listaPsicologos[position].precio)
-                intent.putExtra("n_telefono", listaPsicologos[position].n_telefono)
-                intent.putExtra("especialidades", listaPsicologos[position].especialidades)
-                intent.putExtra("horario", listaPsicologos[position].horario)
-                intent.putExtra("consulta_online", listaPsicologos[position].consulta_online)
-                intent.putExtra("consulta_presencial", listaPsicologos[position].consulta_presencial)
-                intent.putExtra("consulta_telefonica", listaPsicologos[position].consulta_telefonica)
-                intent.putExtra("foto", listaPsicologos[position].foto)
-                intent.putExtra("descripcion", listaPsicologos[position].descripcion)
-                intent.putExtra("puntuacion_media", listaPsicologos[position].puntuacion_media)
 
-                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                 startActivity(intent)
 
             }

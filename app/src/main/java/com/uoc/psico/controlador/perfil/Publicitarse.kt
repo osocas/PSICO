@@ -1,11 +1,12 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.perfil
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -15,11 +16,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.uoc.psico.R
+import com.uoc.psico.controlador.MainActivity
+import com.uoc.psico.controlador.Perfil
 import com.uoc.psico.modelo.Psicologos
-import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.activity_publicitarse.*
-import kotlinx.android.synthetic.main.activity_registrarse.*
-import kotlinx.android.synthetic.main.activity_registrarse.id_registrarme
+
 
 class Publicitarse : AppCompatActivity() {
 
@@ -35,6 +36,8 @@ class Publicitarse : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_publicitarse)
+
+        auth = Firebase.auth
 
         bottomNavigationBar()
 
@@ -98,17 +101,28 @@ class Publicitarse : AppCompatActivity() {
 
 
                     //Guardamos el psicólogo publicitado en la BD
-                    Psicologos(user.email.toString(),et_publi_nombre.text.toString(), et_publi_dirección.text.toString(),
-                        et_publi_precio.text.toString(), et_publi_telefono.text.toString().toInt(),
-                        et_publi_especialidades.text.toString(), et_publi_horario.text.toString(),
-                        cb_publi_online.isChecked, cb_publi_presencial.isChecked, cb_publi_telefonica.isChecked,
-                        foto, et_publi_descripción.text.toString(),
-                        99.0).addPsicologo()
+                    Psicologos(
+                        user.email.toString(),
+                        et_publi_nombre.text.toString(),
+                        et_publi_provincia.text.toString(),
+                        et_publi_ciudad.text.toString(),
+                        et_publi_dirección.text.toString(),
+                        et_publi_precio.text.toString(),
+                        et_publi_telefono.text.toString().toInt(),
+                        et_publi_especialidades.text.toString(),
+                        et_publi_horario.text.toString(),
+                        cb_publi_online.isChecked,
+                        cb_publi_presencial.isChecked,
+                        cb_publi_telefonica.isChecked,
+                        foto,
+                        et_publi_descripción.text.toString(),
+                        99.0
+                    ).addPsicologo()
 
 
                     /*db.collection("psicologos").document(user.email.toString()).set(
                             hashMapOf("correo" to user.email.toString(),
-                                    "mombre" to et_publi_nombre.text.toString(),
+                                    "nombre" to et_publi_nombre.text.toString(),
                                     "direccion" to et_publi_dirección.text.toString(),
                                     "precio" to et_publi_precio.text.toString(),
                                     "n_telefono" to et_publi_telefono.text.toString().toInt(),
@@ -146,13 +160,13 @@ class Publicitarse : AppCompatActivity() {
 
     //Abrimos la galería del móvil
     fun fileUpload() {
-        val intent = Intent (Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type= "*/*"
-        startActivityForResult(intent,File)
+        startActivityForResult(intent, File)
     }
 
     //Una vez seleccionada la imagen se guarda en el Storage de Firebase en la carpeta User
-    override fun onActivityResult (requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == File) {
             if (resultCode == RESULT_OK) {
@@ -171,12 +185,48 @@ class Publicitarse : AppCompatActivity() {
                         //}
 
                         //Mostramos la imagen
-                        Glide.with(this).load(foto).error(R.drawable.ic_foto_perfil).centerCrop().into(iv_publi_foto)
+                        Glide.with(this).load(foto).error(R.drawable.ic_foto_perfil).centerCrop().into(
+                            iv_publi_foto
+                        )
 
                     }
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_menu, menu)
+
+        val item = menu!!.findItem(R.id.busqueda_id)
+        item.setVisible(false)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.perfil_id -> {
+
+                val currentUser = auth.currentUser
+
+                if (currentUser != null) {
+                    val Intent = Intent(this, Perfil::class.java)
+                    Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(Intent)
+                } else {
+                    val Intent = Intent(this, InicioSesion::class.java)
+                    Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(Intent)
+                }
+
+            }
+
+        }
+
+
+
+        return super.onOptionsItemSelected(item)
     }
 
 

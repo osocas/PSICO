@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFE3B3"
-    tools:context=".controlador.Registrarse">
+    tools:context=".controlador.perfil.Registrarse">
 
 
     <ScrollView
@@ -200,7 +200,7 @@
         android:id="@+id/bottomNavigationView_registrarse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
+        android:background="#FFC172"
         android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

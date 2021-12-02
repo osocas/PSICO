@@ -1,19 +1,25 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.psicologos
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.RatingBar
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
-import com.uoc.psico.modelo.BDBackground
+import com.uoc.psico.controlador.perfil.InicioSesion
+import com.uoc.psico.controlador.MainActivity
+import com.uoc.psico.controlador.Perfil
+import com.uoc.psico.modelo.Psicologos
 import com.uoc.psico.modelo.Resenas
 import kotlinx.android.synthetic.main.activity_info_psicologo.*
 
@@ -22,28 +28,56 @@ class InfoPsicologo : AppCompatActivity() {
     //private val extras = intent.extras
     private val db = FirebaseFirestore.getInstance()
     private val user = Firebase.auth.currentUser
+    private lateinit var auth: FirebaseAuth
+
+    //private lateinit var psicologocc: Psicologos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info_psicologo)
 
+        auth = Firebase.auth
 
         bottomNavigationBar()
 
-        mostrarLosDatos()
+
+
 
         val extras = intent.extras
         val correo = extras?.getString("correo")
 
-        bt_infoP_añadirReseña.setOnClickListener{
-            val intent = Intent(this, AnadirResena::class.java)
-            intent.putExtra("correo", correo)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
-            startActivity(intent)
-        }
+        mostrarLosDatos(correo)
+
+        botonAnadirResena(correo)
+
+
 
         reseñas(correo.toString())
     }
+
+    private fun botonAnadirResena(correo: String?) {
+        bt_infoP_añadirReseña.setOnClickListener{
+
+
+            val currentUser = auth.currentUser
+
+            if(currentUser != null){
+                val intent = Intent(this, AnadirResena::class.java)
+                intent.putExtra("correo", correo)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                startActivity(intent)
+            }else{
+                val Intent = Intent(this, InicioSesion::class.java)
+                Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                startActivity(Intent)
+            }
+
+
+
+
+        }
+    }
+
 
     private fun bottomNavigationBar(){
         val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView_infoPsicologo) as BottomNavigationView
@@ -80,11 +114,11 @@ class InfoPsicologo : AppCompatActivity() {
 
     }
 
-    private fun mostrarLosDatos(){
+    private fun mostrarLosDatos(correo: String?) {
 
-        val extras = intent.extras
+        /*val extras = intent.extras
 
-        val mombre = extras?.getString("mombre")
+        val nombre = extras?.getString("nombre")
         val direccion = extras?.getString("direccion")
         val precio = extras?.getString("precio")
         val n_telefono = extras?.getInt("n_telefono").toString()
@@ -94,44 +128,63 @@ class InfoPsicologo : AppCompatActivity() {
         val consulta_presencial = extras?.getBoolean("consulta_presencial")
         val consulta_telefonica = extras?.getBoolean("consulta_telefonica")
         val foto = extras?.getString("foto")
-        val descripcion = extras?.getString("descripcion")
+        val descripcion = extras?.getString("descripcion")*/
         //val puntuacion_media = extras?.getString("puntuacion_media")
 
 
-        tv_infoP_nombre.setText(mombre)
-        tv_infoP_direccion.setText(direccion)
-        tv_infoP_precio.setText(precio)
-        tv_infoP_telefono.setText(n_telefono)
-        tv_infoP_especialidades.setText(especialidades)
-        tv_infoP_horario.setText(horario)
+        if (correo != null) {
+            db.collection("psicologos").document(correo).get().addOnSuccessListener{
+                val psicologo = Psicologos(correo, it.get("nombre") as String, it.get("provincia") as String, it.get("ciudad") as String,
+                    it.get("direccion") as String, it.get("precio") as String, (it.get("n_telefono") as Number).toInt(),
+                    it.get("especialidades") as String, it.get("horario") as String, it.get("consulta_online") as Boolean,
+                    it.get("consulta_presencial") as Boolean, it.get("consulta_telefonica") as Boolean,
+                    it.get("foto") as String, it.get("descripcion") as String, (it.get("puntuacion_media") as Number).toDouble())
 
-        var consultas = ""
-        if(consulta_online == true){
-            consultas += "online"
-            if((consulta_presencial == true) && (consulta_telefonica == true)){
-                consultas += ", "
-            }else{
-                if ((consulta_presencial == true) || (consulta_telefonica == true)){
-                    consultas += " y "
+                //Log.d("TAG", "Esto es lo que hay en Psicologo: " + picologo.)
+                tv_infoP_nombre.setText(psicologo.nombre)
+
+                tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ", " + psicologo.provincia)
+                tv_infoP_precio.setText(psicologo.precio + " €/h")
+                tv_infoP_telefono.setText(psicologo.n_telefono.toString())
+                tv_infoP_especialidades.setText(psicologo.especialidades)
+                tv_infoP_horario.setText(psicologo.horario)
+
+                var consultas = ""
+                if(psicologo.consulta_online == true){
+                    consultas += "online"
+                    if((psicologo.consulta_presencial == true) && (psicologo.consulta_telefonica == true)){
+                        consultas += ", "
+                    }else{
+                        if ((psicologo.consulta_presencial == true) || (psicologo.consulta_telefonica == true)){
+                            consultas += " y "
+                        }
+                    }
                 }
+                if(psicologo.consulta_presencial == true){
+                    consultas = consultas + "presencial"
+                    if(psicologo.consulta_telefonica == true){
+                        consultas += " y "
+                    }
+                }
+                if(psicologo.consulta_telefonica == true){
+                    consultas += "telefónica"
+                }
+
+                consultas += "."
+
+                tv_infoP_consultas.setText(consultas)
+                Glide.with(this).load(psicologo.foto).error(R.drawable.ic_no_foto).centerCrop().into(iv_infoP_foto)
+
+                tv_infoP_descripcion.setText(psicologo.descripcion)
+
+
+
+
+
+
+
             }
         }
-        if(consulta_presencial == true){
-            consultas = consultas + "presencial"
-            if(consulta_telefonica == true){
-                consultas += " y "
-            }
-        }
-        if(consulta_telefonica == true){
-            consultas += "telefónica"
-        }
-
-        consultas += "."
-
-        tv_infoP_consultas.setText(consultas)
-        Glide.with(this).load(foto).error(R.drawable.ic_no_foto).centerCrop().into(iv_infoP_foto)
-
-        tv_infoP_descripcion.setText(descripcion)
 
 
     }
@@ -161,6 +214,8 @@ class InfoPsicologo : AppCompatActivity() {
             }
             resenasRecycler.layoutManager = GridLayoutManager(this, 1)
             resenasRecycler.adapter = ResenaAdapter(listaResenas)
+
+            //Se muestran las estrellas con la puntuación media de las reseñas
             rb_infoPsicologo.setVisibility(RatingBar.VISIBLE)
             rb_infoPsicologo.rating = ((sumaPuntuaciones/resenasSize).toFloat())
 
@@ -174,5 +229,37 @@ class InfoPsicologo : AppCompatActivity() {
        // recycler.layoutManager = GridLayoutManager(this, 2)
         //recycler.adapter = MyAdapter(items)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_menu, menu)
+
+        val item = menu!!.findItem(R.id.busqueda_id)
+        item.setVisible(false)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.perfil_id -> {
+
+                val currentUser = auth.currentUser
+
+                if (currentUser != null) {
+                    val Intent = Intent(this, Perfil::class.java)
+                    Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(Intent)
+                } else {
+                    val Intent = Intent(this, InicioSesion::class.java)
+                    Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(Intent)
+                }
+
+            }
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 }

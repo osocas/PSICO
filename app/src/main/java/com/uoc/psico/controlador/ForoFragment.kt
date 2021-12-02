@@ -11,12 +11,14 @@ import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.controlador.foro.AgregarPostForo
+import com.uoc.psico.controlador.foro.ForoAdapter
+import com.uoc.psico.controlador.psicologos.InfoPsicologo
 import com.uoc.psico.modelo.Foro
-import com.uoc.psico.modelo.Psicologos
 import kotlinx.android.synthetic.main.fragment_foro.*
-import kotlinx.android.synthetic.main.fragment_psicologos.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -70,7 +72,7 @@ class ForoFragment : Fragment() {
 
         var listaPosts = mutableListOf<Foro>()
 
-        db.collection("foro").get().addOnSuccessListener{ result ->
+        db.collection("foro").orderBy("fecha", Query.Direction.DESCENDING).get().addOnSuccessListener{ result ->
             for (i in result){
 
                 listaPosts.add(
@@ -113,7 +115,7 @@ class ForoFragment : Fragment() {
             adapter = ForoAdapter(listaPosts) { position ->
                 val intent = Intent(getActivity(), InfoPsicologo::class.java)
                 intent.putExtra("correo", listaPosts[position].correo)
-                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                 startActivity(intent)
             }
         }

@@ -1,12 +1,17 @@
 package com.uoc.psico.controlador
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.firestore.FirebaseFirestore
 import com.uoc.psico.R
+import com.uoc.psico.controlador.consejos.ConsejosAdapter
+import com.uoc.psico.controlador.consejos.InfoConsejo
+import com.uoc.psico.modelo.Consejos
 import kotlinx.android.synthetic.main.fragment_consejos.*
 
 
@@ -24,6 +29,7 @@ class ConsejosFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +50,43 @@ class ConsejosFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
+
+
+        var listaConsejos = mutableListOf<Consejos>()
+
+        db.collection("consejos").get().addOnSuccessListener{ result ->
+            for (i in result){
+
+                listaConsejos.add(
+                    Consejos(i.data.get("titulo") as String, i.data.get("foto") as String,
+                        i.data.get("contenido") as String, i.data.get("fuente") as String)
+                )
+            }
+
+
+            adapter(listaConsejos)
+
+        }
+
+
+    }
+
+    private fun adapter(listaConsejos: MutableList<Consejos>) {
         consejosReccycler.apply {
             layoutManager =
                 LinearLayoutManager(activity)
-            adapter = ConsejosAdapter()
+
+
+            // Al pulsar sobre algun elemento del reccycler
+            adapter = ConsejosAdapter(listaConsejos) { position ->
+                val intent = Intent(getActivity(), InfoConsejo::class.java)
+                intent.putExtra("titulo", listaConsejos[position].titulo)
+                intent.putExtra("foto", listaConsejos[position].foto)
+                intent.putExtra("contenido", listaConsejos[position].contenido)
+                intent.putExtra("fuente", listaConsejos[position].fuente)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                startActivity(intent)
+            }
         }
     }
 

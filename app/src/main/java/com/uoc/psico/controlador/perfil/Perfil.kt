@@ -2,7 +2,6 @@ package com.uoc.psico.controlador
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +16,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.uoc.psico.R
+import com.uoc.psico.controlador.perfil.Publicitarse
 import kotlinx.android.synthetic.main.activity_perfil.*
 
 

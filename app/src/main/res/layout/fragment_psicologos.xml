@@ -22,6 +22,7 @@
         android:id="@+id/psicologosReccycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ECEAEA"
         tools:layout_editor_absoluteX="152dp"
         tools:layout_editor_absoluteY="300dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

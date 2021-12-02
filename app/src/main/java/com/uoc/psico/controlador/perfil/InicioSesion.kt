@@ -1,4 +1,4 @@
-package com.uoc.psico.controlador
+package com.uoc.psico.controlador.perfil
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,9 +8,11 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.uoc.psico.R
+import com.uoc.psico.controlador.MainActivity
+import com.uoc.psico.controlador.Perfil
+import com.uoc.psico.controlador.ProviderType
 
 import kotlinx.android.synthetic.main.activity_inicio_sesion.*
-import kotlinx.android.synthetic.main.activity_registrarse.*
 
 class InicioSesion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

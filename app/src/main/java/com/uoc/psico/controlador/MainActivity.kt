@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
+import com.uoc.psico.controlador.perfil.InicioSesion
+import com.uoc.psico.controlador.psicologos.Busqueda
 
 
 class MainActivity : AppCompatActivity() {
@@ -104,6 +106,13 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent)
                 }
 
+            }
+            R.id.busqueda_id -> {
+
+                Log.d("TAG", "He entrado dentor de los de la busqueda")
+                val Intent = Intent(this, Busqueda::class.java)
+                Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                startActivity(Intent)
             }
         }
 

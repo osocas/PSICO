@@ -6,7 +6,9 @@ import kotlinx.android.synthetic.main.activity_publicitarse.*
 
 class Psicologos(
         var correo: String,
-        var mombre: String,
+        var nombre: String,
+        var provincia: String,
+        var ciudad: String,
         var direccion: String,
         var precio: String,
         var n_telefono: Int,
@@ -24,9 +26,10 @@ class Psicologos(
         fun addPsicologo(){
                 db.collection("psicologos").document(correo).set(
                         hashMapOf("correo" to correo,
-                                "mombre" to mombre,
-                                "direccion" to direccion,
-                                "precio" to precio,
+                                "nombre" to nombre,
+                                "provincia" to provincia,
+                                "ciudad" to ciudad,
+                                "direccion" to direccion, "precio" to precio,
                                 "n_telefono" to n_telefono,
                                 "especialidades" to especialidades,
                                 "horario" to horario,

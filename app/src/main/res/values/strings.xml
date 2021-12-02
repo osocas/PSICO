@@ -21,7 +21,7 @@
     <string name="Consejos">Consejos</string>
     <string name="Correo_electrónico">Correo electrónico:</string>
     <string name="Añadir_un_post_al_foro">Añadir un post al foro</string>
-    <string name="Direccion">Dirección:</string>
+    <string name="Direccionp">Dirección:</string>
     <string name="Precio">Precio:</string>
     <string name="Teléfono">Teléfono:</string>
     <string name="Especialidades_que_trata">Especialidades que trata:</string>
@@ -31,14 +31,31 @@
     <string name="Añadir_una_reseña">Añadir una reseña</string>
     <string name="Valorar_y_escribir_una_reseña">Valorar y escribir una reseña</string>
     <string name="Compartir_reseña">Compartir reseña</string>
+    <string name="Provincia">Provincia</string>
+    <string name="Dirección">Dirección</string>
+    <string name="Precio_por_hora">Precio por hora</string>
+    <string name="Número_de_teléfono">Número de teléfono</string>
+    <string name="Especialidades_quetrata">Especialidades que trata</string>
+    <string name="Horario_">Horario</string>
+    <string name="Online">Online</string>
+    <string name="Presenciales">Presenciales</string>
+    <string name="Telefónica">Telefónica</string>
+    <string name="Escribe_aquí_tu_descripción">Escribe aquí tu descripción</string>
+    <string name="Publicar">Publicar</string>
+    <string name="Añadir_una_foto">Añadir una foto:</string>
+    <string name="Rellene_los_siguientes_datos_para_publicitarse">Rellene los siguientes datos para publicitarse:</string>
+    <string name="Fuente_de_información">Fuente de información:</string>
     <!--string name=""></string>
 
 
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
-    <string name=""></string>
+
+
+
+
+
+
+
+
     <string name=""></string>
     <string name=""></string>
     <string name=""></string>

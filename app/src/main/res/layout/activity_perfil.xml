@@ -34,8 +34,10 @@
         android:id="@+id/tv_perfil_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="30sp"
+        android:layout_marginTop="8dp"
+        android:textColor="#000000"
+        android:textSize="22sp"
+        android:textStyle="normal|bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_imagen_perfil" />
@@ -47,7 +49,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
         android:text="Edad:"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_perfil_nombre" />
@@ -56,11 +59,12 @@
         android:id="@+id/tv_perfil_edad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:textSize="20sp"
+        android:layout_marginStart="8dp"
+        android:textColor="#3C3C3C "
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/tv_perfil_nombre" />
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView5"
@@ -69,7 +73,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Ciudad:"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -78,11 +83,12 @@
         android:id="@+id/tv_perfil_ciudad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
+        android:layout_marginStart="8dp"
+        android:textColor="#3C3C3C "
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/tv_perfil_edad" />
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView7"
@@ -91,7 +97,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/Correo_electrónico"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -101,8 +108,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="6dp"
-        android:textSize="20sp"
+        android:layout_marginTop="4dp"
+        android:textColor="#3C3C3C "
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -113,7 +121,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Psicólogo/a"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_perfil_correo" />
@@ -139,7 +148,7 @@
         android:layout_marginTop="16dp"
         android:text="Cerrar sesión"
         android:textColor="#26798E"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bt_perfil_publicitarse" />
 

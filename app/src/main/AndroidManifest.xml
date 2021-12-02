@@ -10,14 +10,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PSICO"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".controlador.AnadirResena"></activity>
-        <activity android:name=".controlador.InfoPsicologo" />
-        <activity android:name=".controlador.AgregarPostForo" />
-        <activity android:name=".controlador.Publicitarse"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".controlador.Registrarse"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".controlador.InicioSesion" />
+        <activity android:name=".controlador.consejos.InfoConsejo"></activity>
+        <activity android:name=".controlador.psicologos.Busqueda" />
+        <activity android:name=".controlador.psicologos.AnadirResena" />
+        <activity android:name=".controlador.psicologos.InfoPsicologo" />
+        <activity android:name=".controlador.foro.AgregarPostForo" />
+        <activity
+            android:name=".controlador.perfil.Publicitarse"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".controlador.perfil.Registrarse"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".controlador.perfil.InicioSesion" />
         <activity android:name=".controlador.Perfil" />
         <activity android:name=".controlador.MainActivity">
             <intent-filter>
