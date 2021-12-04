@@ -109,7 +109,7 @@ class Perfil : AppCompatActivity() {
             //tv_perfil_correo.setText(user.email.toString())
             db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener{
                 tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
-                tv_perfil_edad.setText((it.get("edad") as Number?).toString())
+                tv_perfil_edad.setText((it.get("edad") as Number?).toString() + " años")
                 tv_perfil_ciudad.setText(it.get("ciudad") as String?)
                 tv_perfil_correo.setText(user.email.toString())
 

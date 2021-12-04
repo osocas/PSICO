@@ -66,7 +66,7 @@ class Registrarse : AppCompatActivity() {
 
     private fun setup(){
 
-        title = "Autenticación"
+        title = "Registrarse"
 
         id_registrarme.setOnClickListener{
 
@@ -101,7 +101,7 @@ class Registrarse : AppCompatActivity() {
                             saveDataDB(usuario)
                             goToProfile(it.result?.user?.email ?: "", ProviderType.BASIC)
                         } else{
-                            alertError("Ha ocurrido un error en la autenticación del usuario")
+                            alertError("Ha ocurrido un error en la autenticación del usuario, vuelva a intentarlo.")
                         }
                     }
                 }else{ //si las contraseñas no son ifuales

@@ -70,7 +70,7 @@ class InicioSesion : AppCompatActivity() {
 
     private fun setup(){
 
-        title = "Autenticación"
+        title = "Inicio de sesión"
 
         id_inicioSesion.setOnClickListener{
             if (etCorreo.text.isNotEmpty() && etContraseña.text.isNotEmpty()){
@@ -78,19 +78,21 @@ class InicioSesion : AppCompatActivity() {
                     if(it.isSuccessful){
                         goToProfile(it.result?.user?.email ?: "", ProviderType.BASIC)
                     } else{
-                        alertError()
+                        alertError("Ha ocurrido un error en la autenticación del usuario.")
                     }
                 }
 
+            }else{
+                alertError("Debe introducir el correo y la contraseña.")
             }
         }
 
     }
 
-    private fun alertError(){
+    private fun alertError(error: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
-        builder.setMessage("Ha ocurrido un error en la autenticación del usuario")
+        builder.setMessage(error)
         builder.setPositiveButton("Aceptar", null)
         val dialog: AlertDialog = builder.create()
         dialog.show()

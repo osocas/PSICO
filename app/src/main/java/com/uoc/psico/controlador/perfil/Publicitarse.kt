@@ -19,6 +19,7 @@ import com.uoc.psico.R
 import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
 import com.uoc.psico.modelo.Psicologos
+import kotlinx.android.synthetic.main.activity_perfil.*
 import kotlinx.android.synthetic.main.activity_publicitarse.*
 
 
@@ -32,6 +33,8 @@ class Publicitarse : AppCompatActivity() {
 
     private var foto = ""
 
+    private var puntuacionMedia = 99.0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +44,18 @@ class Publicitarse : AppCompatActivity() {
 
         bottomNavigationBar()
 
+        publicitadoConAnterioridad()
+
+
         iv_publi_foto.setOnClickListener{
             fileUpload()
         }
 
 
-        setup()
+        //setup()
 
     }
+
 
     private fun bottomNavigationBar(){
 
@@ -86,62 +93,103 @@ class Publicitarse : AppCompatActivity() {
 
     }
 
-    private fun setup(){
+
+    private fun publicitadoConAnterioridad() {
+        if (user != null) {
+            db.collection("psicologos").document(user.email.toString()).get().addOnSuccessListener {
+                //tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
+
+                //Si se ha publicitado con anterioridad se muestran sus datos
+                if (it != null) {
+
+                    Glide.with(this).load(it.get("foto") as String).error(R.drawable.ic_foto_perfil).centerCrop().into(iv_publi_foto)
+
+                    foto = it.get("foto") as String
+                    puntuacionMedia = it.get("puntuacion_media") as Double
+
+                    et_publi_nombre.setText(it.get("nombre") as String)
+                    et_publi_provincia.setText(it.get("provincia") as String)
+                    et_publi_ciudad.setText(it.get("ciudad") as String)
+                    et_publi_dirección.setText(it.get("direccion") as String)
+                    et_publi_precio.setText(it.get("precio") as String)
+                    et_publi_telefono.setText((it.get("n_telefono") as Number).toString())
+                    et_publi_especialidades.setText(it.get("especialidades") as String)
+                    et_publi_horario.setText(it.get("horario") as String)
+                    cb_publi_online.setChecked(it.get("consulta_online") as Boolean)
+                    cb_publi_presencial.setChecked(it.get("consulta_presencial") as Boolean)
+                    cb_publi_telefonica.setChecked(it.get("consulta_telefonica") as Boolean)
+                    et_publi_descripción.setText(it.get("descripcion") as String)
+
+                    setup(true)
+                }else{
+                    setup(false)
+                }
+
+
+
+            }
+        }
+    }
+
+
+    private fun setup(existe: Boolean){
         bt_publi_publicar.setOnClickListener{
+
+
+            //Comprobamos que todos los campos estén rellenos
             if (et_publi_nombre.text.isNotEmpty() && et_publi_dirección.text.isNotEmpty() &&
                     et_publi_precio.text.isNotEmpty() && et_publi_telefono.text.isNotEmpty() &&
                     et_publi_especialidades.text.isNotEmpty() && et_publi_horario.text.isNotEmpty() &&
                     et_publi_descripción.text.isNotEmpty() && (cb_publi_online.isChecked || cb_publi_presencial.isChecked || cb_publi_telefonica.isChecked)){
 
 
-
-               // Log.d("TAG", "cb_publi_online.isChecked: " + cb_publi_online.isChecked + " otro " + cb_publi_presencial.isChecked + " otro " + cb_publi_telefonica.isChecked)
-
                 if (user != null) {
+                    //Si el usuario ya se ha publicitado con anterioridad se actualizan los datos, si no, se crean.
+                    if (existe == true){
+                        //Actualizamos el psicólogo publicitado en la BD
+                        Psicologos(
+                                user.email.toString(),
+                                et_publi_nombre.text.toString(),
+                                et_publi_provincia.text.toString(),
+                                et_publi_ciudad.text.toString(),
+                                et_publi_dirección.text.toString(),
+                                et_publi_precio.text.toString(),
+                                et_publi_telefono.text.toString().toInt(),
+                                et_publi_especialidades.text.toString(),
+                                et_publi_horario.text.toString(),
+                                cb_publi_online.isChecked,
+                                cb_publi_presencial.isChecked,
+                                cb_publi_telefonica.isChecked,
+                                foto,
+                                et_publi_descripción.text.toString(),
+                                puntuacionMedia
+                        ).updatePsicologo()
 
-
-                    //Guardamos el psicólogo publicitado en la BD
-                    Psicologos(
-                        user.email.toString(),
-                        et_publi_nombre.text.toString(),
-                        et_publi_provincia.text.toString(),
-                        et_publi_ciudad.text.toString(),
-                        et_publi_dirección.text.toString(),
-                        et_publi_precio.text.toString(),
-                        et_publi_telefono.text.toString().toInt(),
-                        et_publi_especialidades.text.toString(),
-                        et_publi_horario.text.toString(),
-                        cb_publi_online.isChecked,
-                        cb_publi_presencial.isChecked,
-                        cb_publi_telefonica.isChecked,
-                        foto,
-                        et_publi_descripción.text.toString(),
-                        99.0
-                    ).addPsicologo()
-
-
-                    /*db.collection("psicologos").document(user.email.toString()).set(
-                            hashMapOf("correo" to user.email.toString(),
-                                    "nombre" to et_publi_nombre.text.toString(),
-                                    "direccion" to et_publi_dirección.text.toString(),
-                                    "precio" to et_publi_precio.text.toString(),
-                                    "n_telefono" to et_publi_telefono.text.toString().toInt(),
-                                    "especialidades" to et_publi_especialidades.text.toString(),
-                                    "horario" to et_publi_horario.text.toString(),
-                                    "consulta_online" to cb_publi_online.isChecked,
-                                    "consulta_presencial" to cb_publi_presencial.isChecked,
-                                    "consulta_telefonica" to cb_publi_telefonica.isChecked,
-                                    "foto" to foto,
-                                    "descripcion" to et_publi_descripción.text.toString(),
-                                    "puntuacion_media" to 5)
-                    )*/
-
+                    }else{
+                        //Guardamos el psicólogo publicitado en la BD
+                        Psicologos(
+                                user.email.toString(),
+                                et_publi_nombre.text.toString(),
+                                et_publi_provincia.text.toString(),
+                                et_publi_ciudad.text.toString(),
+                                et_publi_dirección.text.toString(),
+                                et_publi_precio.text.toString(),
+                                et_publi_telefono.text.toString().toInt(),
+                                et_publi_especialidades.text.toString(),
+                                et_publi_horario.text.toString(),
+                                cb_publi_online.isChecked,
+                                cb_publi_presencial.isChecked,
+                                cb_publi_telefonica.isChecked,
+                                foto,
+                                et_publi_descripción.text.toString(),
+                                puntuacionMedia
+                        ).addPsicologo()
+                    }
 
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
                 }
-
 
             }else{
                 alertError("Para poder publicitarse debe rellenar todos los campos del formulario")
@@ -178,11 +226,6 @@ class Publicitarse : AppCompatActivity() {
                     file_name.getDownloadUrl().addOnSuccessListener { uri ->
 
                         foto = java.lang.String.valueOf(uri).toString()
-
-                        //Modificamos el campo foto  de la BD para añadir la foto obtenída
-                        //if (user != null) {
-                           // db.collection("usuarios").document(user.email.toString()).update("foto", url)
-                        //}
 
                         //Mostramos la imagen
                         Glide.with(this).load(foto).error(R.drawable.ic_foto_perfil).centerCrop().into(

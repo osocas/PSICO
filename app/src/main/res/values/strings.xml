@@ -5,7 +5,7 @@
     <string name="Nombre">Nombre</string>
     <string name="Apellidos">Apellidos</string>
     <string name="Edad">Edad</string>
-    <string name="Ciudad">Ciudad</string>
+    <string name="Ciudad">Municipio o ciudad</string>
     <string name="Correo">Correo</string>
     <string name="Contraseña">Contraseña</string>
     <string name="Repita_la_contraseña">Repita la contraseña</string>
@@ -45,6 +45,7 @@
     <string name="Añadir_una_foto">Añadir una foto:</string>
     <string name="Rellene_los_siguientes_datos_para_publicitarse">Rellene los siguientes datos para publicitarse:</string>
     <string name="Fuente_de_información">Fuente de información:</string>
+    <string name="No_hay_reseñas">No hay reseñas</string>
     <!--string name=""></string>
 
 
@@ -56,7 +57,7 @@
 
 
 
-    <string name=""></string>
+
     <string name=""></string>
     <string name=""></string>
     <string name=""></string>

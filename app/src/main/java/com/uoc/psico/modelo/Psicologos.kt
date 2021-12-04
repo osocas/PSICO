@@ -41,6 +41,23 @@ class Psicologos(
                                 "puntuacion_media" to puntuacion_media))
         }
 
+        fun updatePsicologo(){
+                db.collection("psicologos").document(correo).update(
+                        mapOf("correo" to correo,
+                                "nombre" to nombre,
+                                "provincia" to provincia,
+                                "ciudad" to ciudad,
+                                "direccion" to direccion, "precio" to precio,
+                                "n_telefono" to n_telefono,
+                                "especialidades" to especialidades,
+                                "horario" to horario,
+                                "consulta_online" to consulta_online,
+                                "consulta_presencial" to consulta_presencial,
+                                "consulta_telefonica" to consulta_telefonica,
+                                "foto" to foto,
+                                "descripcion" to descripcion,
+                                "puntuacion_media" to puntuacion_media))
+        }
 
 
 

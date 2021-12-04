@@ -90,7 +90,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/Eres_psicólogo"
-                android:textColor="#000000"
+                android:textColor="#3C3C3C"
                 android:textSize="18sp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -181,6 +181,7 @@
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
                     android:text="@string/Sí"
+                    android:textColor="#3C3C3C"
                     android:textSize="17sp" />
 
                 <RadioButton
@@ -189,6 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/No"
+                    android:textColor="#3C3C3C"
                     android:textSize="17sp" />
             </RadioGroup>
 

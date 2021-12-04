@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +20,7 @@ import com.uoc.psico.controlador.perfil.InicioSesion
 import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
 import kotlinx.android.synthetic.main.activity_busqueda.*
+import kotlinx.android.synthetic.main.activity_registrarse.*
 
 class Busqueda : AppCompatActivity() {
 
@@ -121,57 +123,57 @@ class Busqueda : AppCompatActivity() {
         bt_buscar.setOnClickListener {
 
 
-            var listaBusqueda = mutableListOf<String>()
+            if (et_busqueda_ciudad.text.isNotEmpty() && et_busqueda_provincia.text.isNotEmpty()){
+                var listaBusqueda = mutableListOf<String>()
 
-            db.collection("psicologos").whereEqualTo("ciudad", et_busqueda_ciudad.text.toString()).get().addOnSuccessListener { documents ->
-                for (document in documents) {
-                    if((document.data.get("provincia") as String).equals(
-                            et_busqueda_provincia.text.toString(),
-                            true
-                        ) && ((document.data.get("precio") as String).toInt() <= rangoPrecio) ){//(document.data.get("provincia") as String == et_busqueda_provincia.text.toString())){ //&& (document.data.get("precio") as Int <= rangoPrecio) ){
-                        if(cb_busqueda_online.isChecked && (document.data.get("consulta_online") as Boolean) == true ){
-                            listaBusqueda.add(document.data.get("correo") as String)
-                        }else{
-                            if(cb_busqueda_presenciales.isChecked && (document.data.get("consulta_presencial") as Boolean) == true ){
+                db.collection("psicologos").whereEqualTo("ciudad", et_busqueda_ciudad.text.toString()).get().addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if((document.data.get("provincia") as String).equals(
+                                        et_busqueda_provincia.text.toString(),
+                                        true
+                                ) && ((document.data.get("precio") as String).toInt() <= rangoPrecio) ){//(document.data.get("provincia") as String == et_busqueda_provincia.text.toString())){ //&& (document.data.get("precio") as Int <= rangoPrecio) ){
+                            if(cb_busqueda_online.isChecked && (document.data.get("consulta_online") as Boolean) == true ){
                                 listaBusqueda.add(document.data.get("correo") as String)
                             }else{
-                                if(cb_busqueda_telefonica.isChecked && (document.data.get("consulta_telefonica") as Boolean) == true ){
+                                if(cb_busqueda_presenciales.isChecked && (document.data.get("consulta_presencial") as Boolean) == true ){
                                     listaBusqueda.add(document.data.get("correo") as String)
+                                }else{
+                                    if(cb_busqueda_telefonica.isChecked && (document.data.get("consulta_telefonica") as Boolean) == true ){
+                                        listaBusqueda.add(document.data.get("correo") as String)
+                                    }
                                 }
                             }
-                        }
 
-                        //Si no se ha marcado ningún tipo de consulta se muestran de todos los tipos
-                        if(cb_busqueda_online.isChecked == false && cb_busqueda_presenciales.isChecked == false && cb_busqueda_telefonica.isChecked == false) {
-                            listaBusqueda.add(document.data.get("correo") as String)
+                            //Si no se ha marcado ningún tipo de consulta se muestran de todos los tipos
+                            if(cb_busqueda_online.isChecked == false && cb_busqueda_presenciales.isChecked == false && cb_busqueda_telefonica.isChecked == false) {
+                                listaBusqueda.add(document.data.get("correo") as String)
+                            }
+
                         }
 
                     }
 
-
-                    //document.data.get("comentario")
-
-
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("seleccionado", "psicologosFragment")
+                    intent.putExtra("listaBusqueda", listaBusqueda as ArrayList<String>)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
+                    startActivity(intent)
                 }
-                /*for(i in listaBusqueda){
-                    Log.d("TAG", "Documento ->" + i)
-                }*/
 
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("seleccionado", "psicologosFragment")
-                intent.putExtra("listaBusqueda", listaBusqueda as ArrayList<String>)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
-                startActivity(intent)
-
-
-
-                //intent.putExtra("listaBusqueda", "este es el putextra")
-
-
-
+            }else{
+                alertError("Tanto el campo de municipio o ciudad, como el de provincia deben rellenarse para realizar la búsqueda.")
             }
         }
 
+    }
+
+    private fun alertError(text: String){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error")
+        builder.setMessage(text)
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

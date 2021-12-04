@@ -54,12 +54,17 @@ class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemCl
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         viewHolder.itemNombre.text = listaPsicologos[i].nombre
-        viewHolder.itemDireccion.text = listaPsicologos[i].direccion
+        if(listaPsicologos[i].ciudad == listaPsicologos[i].provincia){
+            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + listaPsicologos[i].ciudad
+        }else{
+            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + listaPsicologos[i].ciudad +  ", " + listaPsicologos[i].provincia
+        }
+
         Glide.with(viewHolder.itemImagen.context).load(listaPsicologos[i].foto).error(R.drawable.ic_no_foto).centerCrop().into(viewHolder.itemImagen)
 
         if (listaPsicologos[i].puntuacion_media.toString() != "NaN" && listaPsicologos[i].puntuacion_media != 99.0){
             viewHolder.itemPuntuacion.setVisibility(RatingBar.VISIBLE)
-            viewHolder.itemNoHayResenas.setVisibility(RatingBar.INVISIBLE)
+            viewHolder.itemNoHayResenas.setVisibility(TextView.INVISIBLE)
             viewHolder.itemPuntuacion.rating = (listaPsicologos[i].puntuacion_media.toFloat())
         }
 

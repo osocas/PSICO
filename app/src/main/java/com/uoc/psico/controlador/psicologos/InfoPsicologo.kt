@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RatingBar
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -116,22 +117,6 @@ class InfoPsicologo : AppCompatActivity() {
 
     private fun mostrarLosDatos(correo: String?) {
 
-        /*val extras = intent.extras
-
-        val nombre = extras?.getString("nombre")
-        val direccion = extras?.getString("direccion")
-        val precio = extras?.getString("precio")
-        val n_telefono = extras?.getInt("n_telefono").toString()
-        val especialidades = extras?.getString("especialidades")
-        val horario = extras?.getString("horario")
-        val consulta_online = extras?.getBoolean("consulta_online")
-        val consulta_presencial = extras?.getBoolean("consulta_presencial")
-        val consulta_telefonica = extras?.getBoolean("consulta_telefonica")
-        val foto = extras?.getString("foto")
-        val descripcion = extras?.getString("descripcion")*/
-        //val puntuacion_media = extras?.getString("puntuacion_media")
-
-
         if (correo != null) {
             db.collection("psicologos").document(correo).get().addOnSuccessListener{
                 val psicologo = Psicologos(correo, it.get("nombre") as String, it.get("provincia") as String, it.get("ciudad") as String,
@@ -140,10 +125,15 @@ class InfoPsicologo : AppCompatActivity() {
                     it.get("consulta_presencial") as Boolean, it.get("consulta_telefonica") as Boolean,
                     it.get("foto") as String, it.get("descripcion") as String, (it.get("puntuacion_media") as Number).toDouble())
 
-                //Log.d("TAG", "Esto es lo que hay en Psicologo: " + picologo.)
                 tv_infoP_nombre.setText(psicologo.nombre)
 
-                tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ", " + psicologo.provincia)
+                if(psicologo.ciudad  == psicologo.provincia){
+                    tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ".")
+                }else {
+                    tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ", " + psicologo.provincia + ".")
+                }
+
+
                 tv_infoP_precio.setText(psicologo.precio + " €/h")
                 tv_infoP_telefono.setText(psicologo.n_telefono.toString())
                 tv_infoP_especialidades.setText(psicologo.especialidades)
@@ -178,11 +168,6 @@ class InfoPsicologo : AppCompatActivity() {
                 tv_infoP_descripcion.setText(psicologo.descripcion)
 
 
-
-
-
-
-
             }
         }
 
@@ -190,21 +175,14 @@ class InfoPsicologo : AppCompatActivity() {
     }
 
     private fun reseñas(correo: String){
-        //db.collection("stories").where("author", "==", user.uid).get()
 
-
-        //BDBackground().execute(correo)
-
-        //resenasRecycler.layoutManager = GridLayoutManager(this, 1)
-        //resenasRecycler.adapter = ResenaAdapter(BDBackground().execute(correo))
-        //bDBackground.execute(correo)
         var sumaPuntuaciones = 0.0
         var resenasSize = 0
 
 
         var listaResenas = mutableListOf<Resenas>()
 
-        Log.d("TAG", "CORREO: "+ user?.email.toString())
+        //Log.d("TAG", "CORREO: "+ user?.email.toString())
         db.collection("resenas").whereEqualTo("correoPsicologo", correo).get().addOnSuccessListener {documents ->
             for (document in documents) {
                 Log.d("TAG", "ESTO ES LO QUE OBTENEMOS: ${document.id} => ${document.data.get("comentario")}")
@@ -215,12 +193,19 @@ class InfoPsicologo : AppCompatActivity() {
             resenasRecycler.layoutManager = GridLayoutManager(this, 1)
             resenasRecycler.adapter = ResenaAdapter(listaResenas)
 
+
+            if(sumaPuntuaciones != 0.0){
+                rb_infoPsicologo.setVisibility(RatingBar.VISIBLE)
+                tv_infoP_noResenas.setVisibility(TextView.INVISIBLE)
+                rb_infoPsicologo.rating = ((sumaPuntuaciones/resenasSize).toFloat())
+                db.collection("psicologos").document(correo).update("puntuacion_media", (sumaPuntuaciones/resenasSize) as Number)
+            }
+
             //Se muestran las estrellas con la puntuación media de las reseñas
-            rb_infoPsicologo.setVisibility(RatingBar.VISIBLE)
-            rb_infoPsicologo.rating = ((sumaPuntuaciones/resenasSize).toFloat())
+
 
             //if (user != null) {
-                db.collection("psicologos").document(correo).update("puntuacion_media", (sumaPuntuaciones/resenasSize) as Number)
+
             //}
         }
 
