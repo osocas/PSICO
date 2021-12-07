@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -13,12 +14,14 @@ import com.uoc.psico.controlador.Perfil
 import com.uoc.psico.controlador.ProviderType
 
 import kotlinx.android.synthetic.main.activity_inicio_sesion.*
+import kotlinx.android.synthetic.main.activity_publicitarse.*
 
 class InicioSesion : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inicio_sesion)
 
+        //Si se pulsa el botón de registrarse se accede a esa pantalla
         id_InicioS_registrar.setOnClickListener {
             val Intent = Intent(this, Registrarse::class.java)
             Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
@@ -26,9 +29,18 @@ class InicioSesion : AppCompatActivity() {
 
         }
 
-        bottomNavigationBar()
+        bottomNavigationBar() //Menú inferior
 
         setup()
+
+        //Ocultar el teclado al tocar el fondo
+        cl_fondo_inicioSesion.setOnClickListener {
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
 
     }
 
@@ -46,8 +58,6 @@ class InicioSesion : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -72,6 +82,8 @@ class InicioSesion : AppCompatActivity() {
 
         title = "Inicio de sesión"
 
+
+        //Al pulsar el botón de iniciar sesió se comprueba si ningún campo está vacío
         id_inicioSesion.setOnClickListener{
             if (etCorreo.text.isNotEmpty() && etContraseña.text.isNotEmpty()){
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(etCorreo.text.toString(), etContraseña.text.toString()).addOnCompleteListener{

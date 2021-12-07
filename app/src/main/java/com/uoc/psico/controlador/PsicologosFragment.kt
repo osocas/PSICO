@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,11 @@ import com.uoc.psico.R
 import com.uoc.psico.controlador.psicologos.InfoPsicologo
 import com.uoc.psico.controlador.psicologos.PsicologosAdapter
 import com.uoc.psico.modelo.Psicologos
+import kotlinx.android.synthetic.main.activity_info_psicologo.*
 import kotlinx.android.synthetic.main.fragment_psicologos.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -28,10 +29,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class PsicologosFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
-    //private val user = Firebase.auth.currentUser
+
     private val db = FirebaseFirestore.getInstance()
 
 
@@ -57,79 +58,38 @@ class PsicologosFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
-        //adapter(getListaPsicologos())
-        //val bdBackground :  BDBackground
-        /*BDBackground().getListaPsicologos()
-
-
-        var binding = ActivityMainBinding.inflate
-
-
-        val listaObserve = Observer<MutableList<Psicologos>>{
-
-        }*/
-
         if (activity?.intent!!.hasExtra("listaBusqueda")) {
            // productList = activity?.intent!!.getStringArrayExtra("ServiceArea").toString()
 
             val extras = activity?.intent!!.extras
             val listaBusqueda = extras?.get("listaBusqueda") as? ArrayList<String>
 
-
-
-            /*if (listaBusqueda != null) {
-                for(i in listaBusqueda){
-                    Log.d("TAG", "listaBusqueda ->" + i)
-                }
-            }*/
-
-
-           // Log.d("TAG", "El INTENT HA LLEGADO CON listaBusqueda" + listaBusqueda )
+            //Si se ha obtenido la lista de usuarios a buscar
             if (listaBusqueda != null) {
-                psicologosBuscados(listaBusqueda)
+                if (listaBusqueda.isEmpty()) {
+                    tv_no_resultados.setVisibility(TextView.VISIBLE)
+                }else{
+                    psicologosBuscados(listaBusqueda)
+                }
+
             }
-        }else{
+        }else{ //Si no se ha realizado una búsqueda previa se muestran todos los usuarios
             todosLosPsicologosDB()
         }
 
-
-
-
-
-
-
-
-
-
-
-
-       // var listaP = getListaPsicologos()
-       // Log.d("TAG", "CONTIENE: " + listaP)
-
-         //var aux : Psicologos
-
-        // val listaPsicologos1 = aux.getListaPsicologos()
-
-
-        //tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
-
-
-
     }
 
+    //Se obtienen los psicólogos buscados
     private fun psicologosBuscados(listaBusqueda: ArrayList<String>) {
         var listaPsicologos = mutableListOf<Psicologos>()
 
         db.collection("psicologos").get().addOnSuccessListener{ result ->
             for (i in result){
-                //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
-
 
                 for(p in listaBusqueda) {
-                    //Log.d("TAG", "listaBusqueda ->" + p)
+
                     if((i.data.get("correo") as String) == p.toString()){
 
-                        Log.d("TAG", "listaBusqueda ->" + p)
                         listaPsicologos.add(
                             Psicologos(i.data.get("correo") as String,
                                 i.data.get("nombre") as String,
@@ -153,18 +113,18 @@ class PsicologosFragment : Fragment() {
 
 
             }
-            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
+
             adapter(listaPsicologos)
 
         }
     }
 
+    //se obtienen todos los psicólogos
     private fun todosLosPsicologosDB() {
         var listaPsicologos = mutableListOf<Psicologos>()
 
         db.collection("psicologos").get().addOnSuccessListener{ result ->
             for (i in result){
-                //Log.d("TAG", "${i.id} => ${i.data}") //${i.data.get("apellidos") as String}
 
                 listaPsicologos.add(
                     Psicologos(i.data.get("correo") as String,
@@ -185,7 +145,7 @@ class PsicologosFragment : Fragment() {
                     )
                 )
             }
-            //Log.d("TAG", "CONTIENE: " + listaPsicologos[0].correo)
+
             adapter(listaPsicologos)
 
         }
@@ -199,8 +159,6 @@ class PsicologosFragment : Fragment() {
 
             // Al pulsar sobre algun elemento del reccycler
             adapter = PsicologosAdapter(listaPsicologos) { position ->
-
-                Toast.makeText(activity, "yoou clecked on item no: $position", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(activity, InfoPsicologo::class.java)
 
@@ -223,7 +181,7 @@ class PsicologosFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment PsicologosFragment.
          */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             PsicologosFragment().apply {

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -20,6 +21,7 @@ import com.uoc.psico.controlador.perfil.InicioSesion
 import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
 import kotlinx.android.synthetic.main.activity_busqueda.*
+import kotlinx.android.synthetic.main.activity_publicitarse.*
 import kotlinx.android.synthetic.main.activity_registrarse.*
 
 class Busqueda : AppCompatActivity() {
@@ -43,6 +45,15 @@ class Busqueda : AppCompatActivity() {
 
         buscar()
 
+        //Ocultar el teclado al tocar el fondo
+        cl_fondo_busqueda.setOnClickListener {
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
+
     }
 
 
@@ -61,8 +72,6 @@ class Busqueda : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -82,7 +91,7 @@ class Busqueda : AppCompatActivity() {
         })
     }
 
-
+    //lista espiner para seleccionar el rengo de precios
     private fun spinner() {
 
         val listaPrecios = listOf("Ver todos", "< 20€", "< 40€", "< 60€", "< 80€")
@@ -93,10 +102,6 @@ class Busqueda : AppCompatActivity() {
 
         spinnerPrecios.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                // Toast.makeText(this@Busqueda, listaPrecios[p2], Toast.LENGTH_SHORT).show()
-                Log.d("TAG", "El seleccionado es: " + p2)
-
-
                 /*Si el que se ha seleccionado es el de la posición 0 (Ver todos), el rango de precio se deja por defecto a 9999
                 para que en la búsqueda muestre todos aquellos que estén por debajo de ese precio, es decir, todos. */
 
@@ -110,7 +115,6 @@ class Busqueda : AppCompatActivity() {
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
-                //spinnerPrecios.text = "Selecciona"
             }
 
         }
@@ -119,19 +123,19 @@ class Busqueda : AppCompatActivity() {
 
     private fun buscar() {
 
-
+        //Si se pulsa el botón de buscar comprueba que los dos primeros campos no estén vacíos, los otros si pueden estar vacíos.
         bt_buscar.setOnClickListener {
-
 
             if (et_busqueda_ciudad.text.isNotEmpty() && et_busqueda_provincia.text.isNotEmpty()){
                 var listaBusqueda = mutableListOf<String>()
 
-                db.collection("psicologos").whereEqualTo("ciudad", et_busqueda_ciudad.text.toString()).get().addOnSuccessListener { documents ->
+                //Busca en la base de datos por la ciudad o municipio escrito
+                db.collection("psicologos").whereEqualTo("ciudad", et_busqueda_ciudad.text.toString().toLowerCase()).get().addOnSuccessListener { documents ->
                     for (document in documents) {
                         if((document.data.get("provincia") as String).equals(
                                         et_busqueda_provincia.text.toString(),
                                         true
-                                ) && ((document.data.get("precio") as String).toInt() <= rangoPrecio) ){//(document.data.get("provincia") as String == et_busqueda_provincia.text.toString())){ //&& (document.data.get("precio") as Int <= rangoPrecio) ){
+                                ) && ((document.data.get("precio") as String).toInt() <= rangoPrecio) ){
                             if(cb_busqueda_online.isChecked && (document.data.get("consulta_online") as Boolean) == true ){
                                 listaBusqueda.add(document.data.get("correo") as String)
                             }else{
@@ -176,9 +180,12 @@ class Busqueda : AppCompatActivity() {
         dialog.show()
     }
 
+
+    //menú barra superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
+        //ocultamos el botón de la lupa
         val item = menu!!.findItem(R.id.busqueda_id)
         item.setVisible(false)
         return super.onCreateOptionsMenu(menu)

@@ -21,8 +21,6 @@ import com.uoc.psico.modelo.Foro
 import kotlinx.android.synthetic.main.fragment_foro.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
@@ -32,15 +30,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ForoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var param1: String? = null
     private var param2: String? = null
 
     private val db = FirebaseFirestore.getInstance()
     private lateinit var auth: FirebaseAuth
     private val user = Firebase.auth.currentUser
-    //private var layoutManager: RecyclerView.LayoutManager? = null
-   // private var adapter: RecyclerView.Adapter<ForoAdapter.ViewHolder>? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +60,8 @@ class ForoFragment : Fragment() {
 
         auth = Firebase.auth
 
-        /*foroReccycler.apply {
-            layoutManager =
-                LinearLayoutManager(activity)
-            adapter = ForoAdapter()
-        }*/
-
-
         var listaPosts = mutableListOf<Foro>()
-
+        //Obtenemos la lita de post del foro
         db.collection("foro").orderBy("fecha", Query.Direction.DESCENDING).get().addOnSuccessListener{ result ->
             for (i in result){
 
@@ -87,7 +77,7 @@ class ForoFragment : Fragment() {
 
 
         if (user != null) {
-            //tv_perfil_correo.setText(user.email.toString())
+            //Si el usuario es psicólog se le muestra el botón para añadir un post al foro
             db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener{
                 if((it.get("psicologo") as Boolean) == true){
                     bt_añadir.setVisibility(Button.VISIBLE)
@@ -101,7 +91,6 @@ class ForoFragment : Fragment() {
             }
         }
 
-        //bt_añadir.setVisibility(Button.VISIBLE)
     }
 
 
@@ -130,7 +119,7 @@ class ForoFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment ForoFragment.
          */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ForoFragment().apply {

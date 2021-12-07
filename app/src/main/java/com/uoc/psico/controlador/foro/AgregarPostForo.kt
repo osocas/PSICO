@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -18,6 +19,7 @@ import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
 import com.uoc.psico.modelo.Foro
 import kotlinx.android.synthetic.main.activity_agregar_post_foro.*
+import kotlinx.android.synthetic.main.activity_publicitarse.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,9 +35,18 @@ class AgregarPostForo : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        bottomNavigationBar()
+        bottomNavigationBar() //Menú inferior
 
         botonAnadirPostForo()
+
+        //Ocultar el teclado al tocar el fondo
+        cl_fondo_anadirPost.setOnClickListener {
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
 
     }
 
@@ -53,8 +64,6 @@ class AgregarPostForo : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -83,7 +92,7 @@ class AgregarPostForo : AppCompatActivity() {
                 val currentDate = sdf.format(Date())
 
                 db.collection("usuarios").document(user.email.toString()).get().addOnSuccessListener {
-                    Log.d("TAG", "el nombre: " + it.get("nombre") as String? + " " + it.get("apellidos") as String?)
+                    //Se guarda la información en la base de datos
                     Foro(user.email.toString(), it.get("nombre") as String? + " " + it.get("apellidos") as String?, et_agregarForo.text.toString()).addPostDB(Date())
 
                     val intent = Intent(this, MainActivity::class.java)
@@ -96,10 +105,11 @@ class AgregarPostForo : AppCompatActivity() {
         }
     }
 
-
+    //Menú superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
+        //Se oculta el botón de la lupa de buscar
         val item = menu!!.findItem(R.id.busqueda_id)
         item.setVisible(false)
         return super.onCreateOptionsMenu(menu)

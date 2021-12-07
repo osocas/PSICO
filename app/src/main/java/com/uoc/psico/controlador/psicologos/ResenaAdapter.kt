@@ -36,10 +36,6 @@ class ResenaAdapter(val listaResenas: MutableList<Resenas>): RecyclerView.Adapte
         holder.itemComentario.text = listaResenas[position].comentario
         holder.itemFecha.text = listaResenas[position].fecha
         holder.itemPuntuacion.rating = listaResenas[position].puntuacion.toFloat()
-
-        //rb_anadir_resena.numStars = 4
-        //rb_anadir_resena.rating = 3.5F
-
     }
 
     override fun getItemCount(): Int {

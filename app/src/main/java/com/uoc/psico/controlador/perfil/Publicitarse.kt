@@ -2,9 +2,11 @@ package com.uoc.psico.controlador.perfil
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -42,19 +44,29 @@ class Publicitarse : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        bottomNavigationBar()
+        bottomNavigationBar() //Menú inferior
 
-        publicitadoConAnterioridad()
+        publicitadoConAnterioridad() // Si se ha publicitado con anterioridad se muestra su contenido para que pueda modificarlo
 
-
+        //Si se pulsa en la imagen se accede al fileUpload() para abrir la galería del movil y añadir una foto
         iv_publi_foto.setOnClickListener{
             fileUpload()
         }
 
+        //Ocultar el teclado al tocar el fondo
+        cl_fondo_publicitarse.setOnClickListener {
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
 
-        //setup()
 
     }
+
+
+
 
 
     private fun bottomNavigationBar(){
@@ -71,8 +83,6 @@ class Publicitarse : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -97,10 +107,9 @@ class Publicitarse : AppCompatActivity() {
     private fun publicitadoConAnterioridad() {
         if (user != null) {
             db.collection("psicologos").document(user.email.toString()).get().addOnSuccessListener {
-                //tv_perfil_nombre.setText(it.get("nombre") as String? + " " + it.get("apellidos") as String?)
 
                 //Si se ha publicitado con anterioridad se muestran sus datos
-                if (it != null) {
+                if (it.get("nombre") != null) {
 
                     Glide.with(this).load(it.get("foto") as String).error(R.drawable.ic_foto_perfil).centerCrop().into(iv_publi_foto)
 
@@ -147,11 +156,14 @@ class Publicitarse : AppCompatActivity() {
                     //Si el usuario ya se ha publicitado con anterioridad se actualizan los datos, si no, se crean.
                     if (existe == true){
                         //Actualizamos el psicólogo publicitado en la BD
+
+
+
                         Psicologos(
                                 user.email.toString(),
                                 et_publi_nombre.text.toString(),
                                 et_publi_provincia.text.toString(),
-                                et_publi_ciudad.text.toString(),
+                                et_publi_ciudad.text.toString().toLowerCase(),
                                 et_publi_dirección.text.toString(),
                                 et_publi_precio.text.toString(),
                                 et_publi_telefono.text.toString().toInt(),
@@ -171,7 +183,7 @@ class Publicitarse : AppCompatActivity() {
                                 user.email.toString(),
                                 et_publi_nombre.text.toString(),
                                 et_publi_provincia.text.toString(),
-                                et_publi_ciudad.text.toString(),
+                                et_publi_ciudad.text.toString().toLowerCase(),
                                 et_publi_dirección.text.toString(),
                                 et_publi_precio.text.toString(),
                                 et_publi_telefono.text.toString().toInt(),
@@ -229,7 +241,7 @@ class Publicitarse : AppCompatActivity() {
 
                         //Mostramos la imagen
                         Glide.with(this).load(foto).error(R.drawable.ic_foto_perfil).centerCrop().into(
-                            iv_publi_foto
+                                iv_publi_foto
                         )
 
                     }
@@ -238,9 +250,12 @@ class Publicitarse : AppCompatActivity() {
         }
     }
 
+
+    //menú superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
+        //ocultamos el botón de la lupa
         val item = menu!!.findItem(R.id.busqueda_id)
         item.setVisible(false)
         return super.onCreateOptionsMenu(menu)
@@ -266,8 +281,6 @@ class Publicitarse : AppCompatActivity() {
             }
 
         }
-
-
 
         return super.onOptionsItemSelected(item)
     }

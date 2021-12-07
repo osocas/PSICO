@@ -27,10 +27,8 @@ class InfoConsejo : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        bottomNavigationBar()
-        mostrarDatos()
-
-
+        bottomNavigationBar() //Menú inferior
+        mostrarDatos() //Mostrar la información
 
     }
 
@@ -47,8 +45,6 @@ class InfoConsejo : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -77,6 +73,9 @@ class InfoConsejo : AppCompatActivity() {
         val contenido = extras?.getString("contenido")
         val fuente = extras?.getString("fuente")
 
+
+        /* para poder detectar y añadir los saltos de línea, se ha añadido :: en donde va un salto de línes
+           esto se hace porque firestore suprime los saltos de línea. */
         val delim = "::"
 
         val list = contenido?.split(delim)
@@ -88,7 +87,7 @@ class InfoConsejo : AppCompatActivity() {
             }
             tv_consejo_contenido.setText(newContenido)
         }
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
 
         Glide.with(this).load(foto).into(iv_consejo_foto)
         tv_consejo_titulo.setText(titulo)
@@ -97,9 +96,12 @@ class InfoConsejo : AppCompatActivity() {
 
     }
 
+
+    //Menú superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
+        //Se oculta el botón de la lupa de buscar
         val item = menu!!.findItem(R.id.busqueda_id)
         item.setVisible(false)
         return super.onCreateOptionsMenu(menu)

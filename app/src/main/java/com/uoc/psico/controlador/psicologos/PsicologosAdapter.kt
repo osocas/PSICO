@@ -11,21 +11,11 @@ import com.bumptech.glide.Glide
 import com.uoc.psico.R
 import com.uoc.psico.modelo.Psicologos
 
-//import androidx.recyclerview.widget.RecyclerView
 
 class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemClick: (Int) -> Unit): RecyclerView.Adapter<PsicologosAdapter.ViewHolder>() {
 
-    //val nombre = arrayOf("Candela", "Marta", "Carlos", "Raul")
-    //val direccion = arrayOf("San Cristobal de la Laguna", "Icod de los vinos", "La Guancha", "Santa Úrsula")
-    /*val imagen = arrayOf(
-        R.drawable.ic_consejos,
-        R.drawable.ic_baseline_forum_24,
-        R.drawable.ic_psicologos,
-        R.drawable.ic_consejos
-    )*/
 
-
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){ //, listener: onItemClickListener): RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var itemImagen: ImageView
         var itemNombre: TextView
         var itemDireccion: TextView
@@ -54,10 +44,21 @@ class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemCl
 
     override fun onBindViewHolder(viewHolder: ViewHolder, i: Int) {
         viewHolder.itemNombre.text = listaPsicologos[i].nombre
-        if(listaPsicologos[i].ciudad == listaPsicologos[i].provincia){
-            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + listaPsicologos[i].ciudad
+
+        //Mostramos la ciudad o municipio con la primera letra de cada palabra en mayúscula.
+        val list = listaPsicologos[i].ciudad?.split(" ")
+        var newCiudad= ""
+
+        if (list != null) {
+            for(i in list){
+                newCiudad += i.toUpperCase()[0].toString() + i.substring(1, i.length).toLowerCase() + " "
+            }
+        }
+
+        if(listaPsicologos[i].ciudad.toLowerCase() == listaPsicologos[i].provincia.toLowerCase()){
+            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + newCiudad + "."
         }else{
-            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + listaPsicologos[i].ciudad +  ", " + listaPsicologos[i].provincia
+            viewHolder.itemDireccion.text = listaPsicologos[i].direccion + ", " + newCiudad +  ", " + listaPsicologos[i].provincia + "."
         }
 
         Glide.with(viewHolder.itemImagen.context).load(listaPsicologos[i].foto).error(R.drawable.ic_no_foto).centerCrop().into(viewHolder.itemImagen)
@@ -70,7 +71,6 @@ class PsicologosAdapter(val listaPsicologos: MutableList<Psicologos>, val itemCl
 
     }
 
-   // inner class PsicologosViewHolder(itemView:View): BaseV
 
     override fun getItemCount(): Int {
         return listaPsicologos.size

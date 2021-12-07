@@ -30,17 +30,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth = Firebase.auth
-       /* val recyclerView = findViewById<RecyclerView>(R.id.psicologosReccycler)
-        val adapter = PsicologosAdapter()
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter*/
-
-       /* val user = Firebase.auth.currentUser
-        if (user != null) {
-            correoUsuarioActual = user.email
-        }
-        Log.d("TAG", "El currentUser es: " + (user?.email ?: "no hay"))*/
 
         //Control del menú de abajo
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -70,19 +59,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-        //val casa = R.id.foroFragment
-        //botón seleccionado
-       // bottomNavigationView.setSelectedItemId(R.id.foroFragment)
-        //-----------------
-
-
-
-
-
     }
 
 
+    //Menú de la parte superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
@@ -109,7 +89,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.busqueda_id -> {
 
-                Log.d("TAG", "He entrado dentor de los de la busqueda")
                 val Intent = Intent(this, Busqueda::class.java)
                 Intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                 startActivity(Intent)

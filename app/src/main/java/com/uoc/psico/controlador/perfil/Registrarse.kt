@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,6 +15,7 @@ import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
 import com.uoc.psico.controlador.ProviderType
 import com.uoc.psico.modelo.Usuario
+import kotlinx.android.synthetic.main.activity_publicitarse.*
 import kotlinx.android.synthetic.main.activity_registrarse.*
 
 
@@ -21,13 +23,28 @@ import kotlinx.android.synthetic.main.activity_registrarse.*
 
 class Registrarse : AppCompatActivity() {
 
-    private val db = FirebaseFirestore.getInstance()
+    //private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registrarse)
 
+        bottomNavigationBar() //menú inferior
 
+        setup()
+
+        //Ocultar el teclado al tocar el fondo
+        cl_fondo_registrarse.setOnClickListener {
+            val view = this.currentFocus
+            if (view != null) {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
+            }
+        }
+    }
+
+
+    private fun bottomNavigationBar(){
         val bottomNavigationView = findViewById<View>(R.id.bottomNavigationView_registrarse) as BottomNavigationView
         //Ningún elemento seleccionado
         bottomNavigationView.getMenu().setGroupCheckable(0, false, true)
@@ -40,8 +57,6 @@ class Registrarse : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -59,20 +74,13 @@ class Registrarse : AppCompatActivity() {
             }
             true
         })
-
-        setup()
     }
-
 
     private fun setup(){
 
         title = "Registrarse"
 
         id_registrarme.setOnClickListener{
-
-            /*if (rb_si.isChecked){
-                Log.d("TAG", "chaequeado el si")
-            }*/
 
             //Verificamos que todos los campos están rellenos
             if (et_Registro_Correo.text.isNotEmpty() && et_Registro_Contraseña.text.isNotEmpty() &&
@@ -93,12 +101,11 @@ class Registrarse : AppCompatActivity() {
                                 psicologo = true
                             }
 
-                            val usuario = Usuario(et_Registro_Correo.text.toString(),
+                            //Se guarda el usuarios en la base de datos
+                            Usuario(et_Registro_Correo.text.toString(),
                                 et_registro_nombre.text.toString(), et_registro_apellido.text.toString(),
-                                et_registro_edad.text.toString().toInt(), et_registro_ciudad.text.toString(), psicologo)
+                                et_registro_edad.text.toString().toInt(), et_registro_ciudad.text.toString(), psicologo).addUsuario()
 
-
-                            saveDataDB(usuario)
                             goToProfile(it.result?.user?.email ?: "", ProviderType.BASIC)
                         } else{
                             alertError("Ha ocurrido un error en la autenticación del usuario, vuelva a intentarlo.")
@@ -133,21 +140,5 @@ class Registrarse : AppCompatActivity() {
         }
         startActivity(intent)
     }
-
-    private fun saveDataDB(usuario: Usuario){
-
-        usuario.addUsuario()
-
-    /*db.collection("usuarios").document(usuario.correo).set(
-            hashMapOf("nombre" to usuario.nombre,
-            "apellidos" to usuario.apellidos,
-            "edad" to usuario.edad,
-            "ciudad" to usuario.ciudad,
-            "psicologo" to usuario.psicologo,
-            "foto" to "")
-        )*/
-    }
-
-
 
 }

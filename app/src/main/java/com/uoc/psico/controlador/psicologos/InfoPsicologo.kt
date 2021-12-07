@@ -1,14 +1,13 @@
 package com.uoc.psico.controlador.psicologos
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -17,21 +16,20 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.uoc.psico.R
-import com.uoc.psico.controlador.perfil.InicioSesion
 import com.uoc.psico.controlador.MainActivity
 import com.uoc.psico.controlador.Perfil
+import com.uoc.psico.controlador.perfil.InicioSesion
 import com.uoc.psico.modelo.Psicologos
 import com.uoc.psico.modelo.Resenas
+import kotlinx.android.synthetic.main.activity_info_consejo.*
 import kotlinx.android.synthetic.main.activity_info_psicologo.*
 
 class InfoPsicologo : AppCompatActivity() {
 
-    //private val extras = intent.extras
     private val db = FirebaseFirestore.getInstance()
     private val user = Firebase.auth.currentUser
     private lateinit var auth: FirebaseAuth
 
-    //private lateinit var psicologocc: Psicologos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +37,7 @@ class InfoPsicologo : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        bottomNavigationBar()
-
-
-
+        bottomNavigationBar() //menú inferior
 
         val extras = intent.extras
         val correo = extras?.getString("correo")
@@ -51,14 +46,13 @@ class InfoPsicologo : AppCompatActivity() {
 
         botonAnadirResena(correo)
 
-
-
         reseñas(correo.toString())
     }
 
     private fun botonAnadirResena(correo: String?) {
         bt_infoP_añadirReseña.setOnClickListener{
 
+            //Si el usuario no se ha autenticado lo envía a la pantalla de iniciar sesión
 
             val currentUser = auth.currentUser
 
@@ -93,8 +87,6 @@ class InfoPsicologo : AppCompatActivity() {
                     intent.putExtra("seleccionado", "psicologosFragment")
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION) //quitar la animación entre activitys
                     startActivity(intent)
-                    //MainActivity.openFragment(PsicologosFragment.newInstance("", ""))
-                    // openFragment(PsicologosFragment.newInstance("", ""))
                 }
                 R.id.foroFragment -> {
                     val intent = Intent(this, MainActivity::class.java)
@@ -115,22 +107,35 @@ class InfoPsicologo : AppCompatActivity() {
 
     }
 
+    //Se muestra toda la información del psicólogo
     private fun mostrarLosDatos(correo: String?) {
 
         if (correo != null) {
             db.collection("psicologos").document(correo).get().addOnSuccessListener{
                 val psicologo = Psicologos(correo, it.get("nombre") as String, it.get("provincia") as String, it.get("ciudad") as String,
-                    it.get("direccion") as String, it.get("precio") as String, (it.get("n_telefono") as Number).toInt(),
-                    it.get("especialidades") as String, it.get("horario") as String, it.get("consulta_online") as Boolean,
-                    it.get("consulta_presencial") as Boolean, it.get("consulta_telefonica") as Boolean,
-                    it.get("foto") as String, it.get("descripcion") as String, (it.get("puntuacion_media") as Number).toDouble())
+                        it.get("direccion") as String, it.get("precio") as String, (it.get("n_telefono") as Number).toInt(),
+                        it.get("especialidades") as String, it.get("horario") as String, it.get("consulta_online") as Boolean,
+                        it.get("consulta_presencial") as Boolean, it.get("consulta_telefonica") as Boolean,
+                        it.get("foto") as String, it.get("descripcion") as String, (it.get("puntuacion_media") as Number).toDouble())
 
                 tv_infoP_nombre.setText(psicologo.nombre)
 
-                if(psicologo.ciudad  == psicologo.provincia){
-                    tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ".")
+
+                //Mostramos la ciudad o municipio con la primera letra de cada palabra en mayúscula.
+                val list = psicologo.ciudad?.split(" ")
+                var newCiudad= ""
+
+                if (list != null) {
+                    for(i in list){
+                        newCiudad += i.toUpperCase()[0].toString() + i.substring(1, i.length).toLowerCase() + " "
+                    }
+                }
+
+
+                if(psicologo.ciudad.toLowerCase()  == psicologo.provincia.toLowerCase()){
+                    tv_infoP_direccion.setText(psicologo.direccion + ", " + newCiudad + ".")
                 }else {
-                    tv_infoP_direccion.setText(psicologo.direccion + ", " + psicologo.ciudad + ", " + psicologo.provincia + ".")
+                    tv_infoP_direccion.setText(psicologo.direccion + ", " + newCiudad + ", " + psicologo.provincia + ".")
                 }
 
 
@@ -182,10 +187,9 @@ class InfoPsicologo : AppCompatActivity() {
 
         var listaResenas = mutableListOf<Resenas>()
 
-        //Log.d("TAG", "CORREO: "+ user?.email.toString())
-        db.collection("resenas").whereEqualTo("correoPsicologo", correo).get().addOnSuccessListener {documents ->
+        //Se buscan las reseñas que tenga ese psicólogo en la base de datos.
+        db.collection("resenas").whereEqualTo("correoPsicologo", correo).get().addOnSuccessListener { documents ->
             for (document in documents) {
-                Log.d("TAG", "ESTO ES LO QUE OBTENEMOS: ${document.id} => ${document.data.get("comentario")}")
                 listaResenas.add(Resenas(document.data.get("nombre") as String, document.data.get("puntuacion") as Double, document.data.get("fecha") as String, document.data.get("comentario") as String))
                 resenasSize++
                 sumaPuntuaciones += (document.data.get("puntuacion") as Double)
@@ -193,31 +197,23 @@ class InfoPsicologo : AppCompatActivity() {
             resenasRecycler.layoutManager = GridLayoutManager(this, 1)
             resenasRecycler.adapter = ResenaAdapter(listaResenas)
 
-
+            //Se realiza el cálculo de la puntuación media de todas las reseñas y se actualiza en la base de datos
             if(sumaPuntuaciones != 0.0){
                 rb_infoPsicologo.setVisibility(RatingBar.VISIBLE)
                 tv_infoP_noResenas.setVisibility(TextView.INVISIBLE)
                 rb_infoPsicologo.rating = ((sumaPuntuaciones/resenasSize).toFloat())
-                db.collection("psicologos").document(correo).update("puntuacion_media", (sumaPuntuaciones/resenasSize) as Number)
+                db.collection("psicologos").document(correo).update("puntuacion_media", (sumaPuntuaciones / resenasSize) as Number)
             }
 
-            //Se muestran las estrellas con la puntuación media de las reseñas
-
-
-            //if (user != null) {
-
-            //}
         }
 
-        //resenasRecycler.layoutManager = GridLayoutManager(this, 2)
-
-       // recycler.layoutManager = GridLayoutManager(this, 2)
-        //recycler.adapter = MyAdapter(items)
     }
 
+    //Menú de la barra superior
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
 
+        //Se oculta el botón de la lupa
         val item = menu!!.findItem(R.id.busqueda_id)
         item.setVisible(false)
         return super.onCreateOptionsMenu(menu)
